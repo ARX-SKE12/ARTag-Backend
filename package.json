@@ -1,7 +1,7 @@
 {
-  "name": "socket-chat-example",
-  "version": "0.0.1",
-  "description": "my first socket.io app",
+  "name": "artag-backend",
+  "version": "0.1.1",
+  "description": "Backend for ARTag",
   "scripts": {
     "server": "nodemon ./index.js --exec babel-node"
   },
