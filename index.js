@@ -1,9 +1,15 @@
-var app = require('express')();
-var http = require('http').Server(app);
-var io = require('socket.io')(http);
+import Express from 'express'
+import Http from 'http'
+import MongoDB from 'mongodb'
+import Socket from 'socket.io'
 
-var MongoClient = require('mongodb').MongoClient;
-var mongoURL = "mongodb://localhost:27017/arxtest1";
+const app = Express()
+const server = Http.Server(app)
+const io = Socket(server)
+
+const MongoClient = MongoDB.Client
+
+const mongoURL = 'mongodb://localhost:27017/arxtest1'
 
 app.get('/', function(req, res){
   res.sendFile(__dirname + '/frontend/index.html');
@@ -72,6 +78,6 @@ function meshToString(mesh) {
 
 }
 
-http.listen(3000, function(){
+server.listen(3000, function(){
   console.log('listening on *:3000');
 });
