@@ -11,27 +11,6 @@ const MongoClient = MongoDB.Client
 
 const mongoURL = 'mongodb://localhost:27017/arxtest1'
 
-app.get('/', function(req, res){
-  res.sendFile(__dirname + '/frontend/index.html');
-});
-
-app.get('/old', function(req, res){
-  res.sendFile(__dirname + '/index.html');
-});
-
-app.get('/test-fire', function(req, res){
-  res.sendFile(__dirname + '/test-fire.html')
-})
-
-app.get('/tags', function(req, res){
-  res.send(JSON.stringify(
-    {
-      name: 'test',
-      description: 'funcking test'
-    }
-  ));
-})
-
 app.post('/admin/createdb', function(req, res){
   MongoClient.connect(mongoURL, function(err, db) {
     if (err) throw err;
