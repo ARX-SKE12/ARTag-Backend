@@ -44,6 +44,6 @@ function meshToString(mesh) {
 
 }
 
-server.listen(3000, function(){
+server.listen(3000, err => {
   console.log('listening on *:3000')
 })
