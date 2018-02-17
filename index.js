@@ -1,8 +1,11 @@
+import DotEnv from 'dotenv'
 import Express from 'express'
 import Http from 'http'
 import MongoDB from 'mongodb'
 import Socket from 'socket.io'
 
+DotEnv.config()
+console.log(process.env)
 const app = Express()
 const server = Http.Server(app)
 const io = Socket(server)
