@@ -9,6 +9,8 @@
     "dotenv": "^5.0.0",
     "express": "^4.15.2",
     "mongodb": "^3.0.1",
+    "passport-facebook": "^2.1.1",
+    "passport-facebook-token": "^3.3.0",
     "socket.io": "^2.0.4"
   },
   "devDependencies": {

@@ -5,6 +5,7 @@ import MongoDB from 'mongodb'
 import Socket from 'socket.io'
 
 DotEnv.config()
+
 const app = Express()
 const server = Http.Server(app)
 const io = Socket(server)
