@@ -10,3 +10,5 @@ Passport.use(new FacebookTokenStrategy(
         clientSecret: FACEBOOK_APP_SECRET
     })
 ))
+
+export default Passport
