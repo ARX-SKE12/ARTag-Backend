@@ -12,7 +12,8 @@ const io = Socket(server)
 
 const MongoClient = MongoDB.Client
 
-const mongoURL = 'mongodb://localhost:27017/arxtest1'
+const mongoURL = process.env.MONGO_URI
+const PORT = process.env.BACKEND_PORT
 
 app.post('/admin/createdb', (req, res) => MongoClient.connect(mongoURL, (err, db) => {
     if (err) throw err
@@ -44,6 +45,6 @@ function meshToString(mesh) {
 
 }
 
-server.listen(3000, err => {
-  console.log('listening on *:3000')
+server.listen(PORT, err => {
+  console.log(`listening on *:${PORT}`)
 })
