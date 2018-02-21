@@ -1,11 +1,11 @@
 import BodyParser from 'body-parser'
 import DotEnv from 'dotenv'
 import Express from 'express'
-import FBAuth from './modules/auth'
+import FB from 'modules/facebook'
+import FBAuth from 'modules/auth'
 import Http from 'http'
 import MongoDB from 'mongodb'
-import Request from 'request'
-import Session from './modules/session'
+import Session from 'modules/session'
 import Socket from 'socket.io'
 
 DotEnv.config()
@@ -35,8 +35,7 @@ app.post('/admin/createdb', (req, res) => MongoClient.connect(mongoURL, (err, db
 )*/
 app.post('/auth/facebook/token', FBAuth.authenticate('facebook-token'), (req, res) => {
   req.session.token = req.body.access_token
-  console.log(`graph.facebook.com/${req.user.profile.id}?access_token=${req.session.token}`)
-  Request.get(`https://graph.facebook.com/${req.user.profile.id}?access_token=${req.session.token}`, (err, res, body) => console.log(res.body))
+  FB.getUser(req.session.token,req.user.profile.id, (err, res) => console.log(res) )
   res.send(req.user)
 })
 
@@ -45,6 +44,7 @@ io.on('connection', socket => {
   console.log('a user conected')
   socket.on('send-message', msg => {
     console.log(socket.req.user)
+    console.log(socket.request.session)
     console.log('a user send: ', msg)
     io.emit('forward-message', msg)
   })
