@@ -2,11 +2,9 @@ import BodyParser from 'body-parser'
 import DotEnv from 'dotenv'
 import Express from 'express'
 import FB from 'modules/facebook'
-import FBAuth from 'modules/auth'
 import Http from 'http'
 import MongoDB from 'mongodb'
 import Session from 'modules/session'
-import SharedSession from 'express-socket.io-session'
 import Socket from 'socket.io'
 import store from 'modules/session/store'
 
@@ -21,13 +19,6 @@ app.use(BodyParser.urlencoded({ extended: true }))
 
 app.use(Session)
 
-app.use(FBAuth.initialize())
-app.use(FBAuth.session())
-/*
-io.use(SharedSession(Session, {
-  autoSave: true
-}))
-*/  
 io.use(function(socket, next) {
   Session(socket.handshake, {}, next)
 })
@@ -43,14 +34,14 @@ app.post('/admin/createdb', (req, res) => MongoClient.connect(mongoURL, (err, db
     db.close()
   })
 )*/
-app.post('/auth/facebook/token', FBAuth.authenticate('facebook-token'), (req, res) => {
-  console.log(req.connection.remoteAddress)
-  req.session.token = req.body.access_token
-  req.session.save()
-  console.log('es', req.session)
-  FB.getUser(req.session.token,req.user.profile.id, (err, res) => console.log(res) )
-  res.send(req.user)
-})
+// app.post('/auth/facebook/token', FBAuth.authenticate('facebook-token'), (req, res) => {
+//   console.log(req.connection.remoteAddress)
+//   req.session.token = req.body.access_token
+//   req.session.save()
+//   console.log('es', req.session)
+//   FB.getUser(req.session.token,req.user.profile.id, (err, res) => console.log(res) )
+//   res.send(req.user)
+// })
 
 io.on('connection', socket => {
   console.log('a user conected')
@@ -58,7 +49,6 @@ io.on('connection', socket => {
   socket.on('auth', auth_data => {
     socket.handshake.session.token = auth_data.token
     socket.handshake.session.client_id = auth_data.client_id
-    socket.save()
   })
 
   socket.on('send-message', msg => {
