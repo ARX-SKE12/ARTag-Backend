@@ -1,30 +1,43 @@
+import Auth from 'modules/auth'
+import BodyParser from 'modules/body-parser'
 import DotEnv from 'dotenv'
 import Express from 'express'
 import Http from 'http'
 import MongoDB from 'mongodb'
+import Session from 'modules/session'
 import Socket from 'socket.io'
 
 DotEnv.config()
-console.log(process.env)
+
 const app = Express()
 const server = Http.Server(app)
 const io = Socket(server)
 
+BodyParser(app)
+
+Session(app, io)
+
+/*
 const MongoClient = MongoDB.Client
 
-const mongoURL = 'mongodb://localhost:27017/arxtest1'
-
+const mongoURL = process.env.MONGO_URI*/
+const PORT = process.env.BACKEND_PORT
+/*
 app.post('/admin/createdb', (req, res) => MongoClient.connect(mongoURL, (err, db) => {
     if (err) throw err
     console.log("Database created!")
     db.close()
   })
-)
+)*/
 
 io.on('connection', socket => {
   console.log('a user conected')
+
+  Auth(socket)
+
   socket.on('send-message', msg => {
-    console.log('a user send: ', msg)
+    console.log(socket.handshake.address)
+    console.log('ss',socket.handshake.session)
     io.emit('forward-message', msg)
   })
 
@@ -44,6 +57,6 @@ function meshToString(mesh) {
 
 }
 
-server.listen(3000, err => {
-  console.log('listening on *:3000')
+server.listen(PORT, err => {
+  console.log(`listening on *:${PORT}`)
 })
