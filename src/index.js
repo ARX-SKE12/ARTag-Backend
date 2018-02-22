@@ -1,3 +1,4 @@
+import Auth from 'modules/auth'
 import BodyParser from 'body-parser'
 import DotEnv from 'dotenv'
 import Express from 'express'
@@ -19,9 +20,7 @@ app.use(BodyParser.urlencoded({ extended: true }))
 
 app.use(Session)
 
-io.use(function(socket, next) {
-  Session(socket.handshake, {}, next)
-})
+io.use((socket, next) => Session(socket.handshake, {}, next))
 /*
 const MongoClient = MongoDB.Client
 
@@ -45,6 +44,8 @@ app.post('/admin/createdb', (req, res) => MongoClient.connect(mongoURL, (err, db
 
 io.on('connection', socket => {
   console.log('a user conected')
+
+  Auth(socket)
 
   socket.on('auth', auth_data => {
     socket.handshake.session.token = auth_data.token
