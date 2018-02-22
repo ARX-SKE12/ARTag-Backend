@@ -35,11 +35,6 @@ io.on('connection', socket => {
 
   Auth(socket)
 
-  socket.on('auth', auth_data => {
-    socket.handshake.session.token = auth_data.token
-    socket.handshake.session.client_id = auth_data.client_id
-  })
-
   socket.on('send-message', msg => {
     console.log(socket.handshake.address)
     console.log('ss',socket.handshake.session)
