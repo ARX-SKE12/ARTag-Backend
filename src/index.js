@@ -6,7 +6,9 @@ import FBAuth from 'modules/auth'
 import Http from 'http'
 import MongoDB from 'mongodb'
 import Session from 'modules/session'
+import SharedSession from 'express-socket.io-session'
 import Socket from 'socket.io'
+import store from 'modules/session/store'
 
 DotEnv.config()
 
@@ -15,12 +17,20 @@ const server = Http.Server(app)
 const io = Socket(server)
 
 app.use(BodyParser.json())
+app.use(BodyParser.urlencoded({ extended: true }))
 
 app.use(Session)
 
 app.use(FBAuth.initialize())
 app.use(FBAuth.session())
-
+/*
+io.use(SharedSession(Session, {
+  autoSave: true
+}))
+*/  
+io.use(function(socket, next) {
+  Session(socket.handshake, {}, next)
+})
 /*
 const MongoClient = MongoDB.Client
 
@@ -34,18 +44,26 @@ app.post('/admin/createdb', (req, res) => MongoClient.connect(mongoURL, (err, db
   })
 )*/
 app.post('/auth/facebook/token', FBAuth.authenticate('facebook-token'), (req, res) => {
+  console.log(req.connection.remoteAddress)
   req.session.token = req.body.access_token
+  req.session.save()
+  console.log('es', req.session)
   FB.getUser(req.session.token,req.user.profile.id, (err, res) => console.log(res) )
   res.send(req.user)
 })
 
-io.use((socket, next) => Session(socket.request, {}, next))
 io.on('connection', socket => {
   console.log('a user conected')
+
+  socket.on('auth', auth_data => {
+    socket.handshake.session.token = auth_data.token
+    socket.handshake.session.client_id = auth_data.client_id
+    socket.save()
+  })
+
   socket.on('send-message', msg => {
-    console.log(socket.req.user)
-    console.log(socket.request.session)
-    console.log('a user send: ', msg)
+    console.log(socket.handshake.address)
+    console.log('ss',socket.handshake.session)
     io.emit('forward-message', msg)
   })
 
