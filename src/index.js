@@ -1,12 +1,11 @@
 import Auth from 'modules/auth'
-import BodyParser from 'body-parser'
+import BodyParser from 'modules/body-parser'
 import DotEnv from 'dotenv'
 import Express from 'express'
 import Http from 'http'
 import MongoDB from 'mongodb'
 import Session from 'modules/session'
 import Socket from 'socket.io'
-import store from 'modules/session/store'
 
 DotEnv.config()
 
@@ -14,8 +13,7 @@ const app = Express()
 const server = Http.Server(app)
 const io = Socket(server)
 
-app.use(BodyParser.json())
-app.use(BodyParser.urlencoded({ extended: true }))
+BodyParser(app)
 
 Session(app, io)
 
