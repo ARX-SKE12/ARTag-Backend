@@ -1,15 +1,15 @@
-import DotEnv from 'dotenv'
 import ExpressSession from 'express-session'
+import { SESSION_SECRET_KEY } from 'modules/session/constants'
 import store from 'modules/session/store'
 
-DotEnv.config()
-
-
-const SESSION_SECRET_KEY = process.env.SESSION_SECRET_KEY
-
-export default ExpressSession({
+const session = ExpressSession({
     secret: SESSION_SECRET_KEY,
     resave: true,
     saveUninitialized: true,
     store
 })
+
+export default (app, io) => {
+    app.use(session)
+    io.use((socket, next) => session(socket.handshake, {}, next))
+}

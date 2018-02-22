@@ -2,7 +2,6 @@ import Auth from 'modules/auth'
 import BodyParser from 'body-parser'
 import DotEnv from 'dotenv'
 import Express from 'express'
-import FB from 'modules/facebook'
 import Http from 'http'
 import MongoDB from 'mongodb'
 import Session from 'modules/session'
@@ -18,9 +17,8 @@ const io = Socket(server)
 app.use(BodyParser.json())
 app.use(BodyParser.urlencoded({ extended: true }))
 
-app.use(Session)
+Session(app, io)
 
-io.use((socket, next) => Session(socket.handshake, {}, next))
 /*
 const MongoClient = MongoDB.Client
 
@@ -33,14 +31,6 @@ app.post('/admin/createdb', (req, res) => MongoClient.connect(mongoURL, (err, db
     db.close()
   })
 )*/
-// app.post('/auth/facebook/token', FBAuth.authenticate('facebook-token'), (req, res) => {
-//   console.log(req.connection.remoteAddress)
-//   req.session.token = req.body.access_token
-//   req.session.save()
-//   console.log('es', req.session)
-//   FB.getUser(req.session.token,req.user.profile.id, (err, res) => console.log(res) )
-//   res.send(req.user)
-// })
 
 io.on('connection', socket => {
   console.log('a user conected')
