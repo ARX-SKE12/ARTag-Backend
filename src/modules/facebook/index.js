@@ -1,11 +1,12 @@
-import { FACEBOOK_GRAPH_API_ROOT, ME } from 'modules/facebook/constants'
+import { FACEBOOK_GRAPH_API_ROOT, ME, REQUIRED_FIELDS } from 'modules/facebook/constants'
 
 import Request from 'request-promise'
 
 function fetchFromFacebook(access_token, callback, id) {
     if (!id) id = ME
     const qs = {
-        access_token
+        access_token,
+        fields: REQUIRED_FIELDS
     }
     Request.get({
         url:`${FACEBOOK_GRAPH_API}/${id}`,
