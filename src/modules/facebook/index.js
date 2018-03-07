@@ -11,7 +11,11 @@ function fetchFromFacebook(access_token, callback, id) {
     Request.get({
         url:`${FACEBOOK_GRAPH_API}/${id}`,
         qs
-    }).then(res => callback(null, res)).catch(err => callback(err))
+    }).then(res => callback(null, {
+        id: res.id,
+        name: res.name,
+        profilePictureURL: res.picture.data.url
+    })).catch(err => callback(err))
 }
 
 export function getMe(access_token, callback) {
