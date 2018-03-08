@@ -17,18 +17,7 @@ BodyParser(app)
 
 Session(app, io)
 
-/*
-const MongoClient = MongoDB.Client
-
-const mongoURL = process.env.MONGO_URI*/
 const PORT = process.env.BACKEND_PORT
-/*
-app.post('/admin/createdb', (req, res) => MongoClient.connect(mongoURL, (err, db) => {
-    if (err) throw err
-    console.log("Database created!")
-    db.close()
-  })
-)*/
 
 io.on('connection', socket => {
   console.log('a user conected')
