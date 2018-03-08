@@ -32,3 +32,12 @@ export function update(collection, target, data, cb) {
         })
     }) 
 }
+
+export function retrieve(collection, target, cb) {
+    connect(collection, (err, collection) => {
+        collection.find({}, target, (err, res) => {
+            if (err) cb(err)
+            else cb(null, res)
+        })
+    })
+}
