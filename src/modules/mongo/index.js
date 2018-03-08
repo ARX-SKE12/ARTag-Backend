@@ -10,7 +10,7 @@ function connect(collection, cb) {
     })
 }
 
-export function insert(collection, data, cb) {
+export function create(collection, data, cb) {
     connect(collection, (err, collection) => {
         if (err) cb(err)
         else collection.insertOne(data, (err, res) => {
