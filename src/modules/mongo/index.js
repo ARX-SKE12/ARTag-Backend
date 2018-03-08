@@ -41,3 +41,12 @@ export function retrieve(collection, target, cb) {
         })
     })
 }
+
+export function list(collection, cb) {
+    connect(collection, (err, collection) => {
+        collection.find({}, (err, res) => {
+            if (err) cb(err)
+            else cb(null, res)
+        })
+    })
+}
