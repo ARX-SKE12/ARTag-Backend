@@ -6,6 +6,7 @@ function connect(collection, cb) {
     Client.connect(URI, (err, db) => {
         if (err) cb(err)
         else cb(null, db.db(DATABASE_NAME).collection(collection))
+        db.close()
     })
 }
 
@@ -17,4 +18,17 @@ export function insert(collection, data, cb) {
             else cb(null, res)
         })
     })
+}
+
+export function update(collection, target, data, cb) {
+    connect(collection, (err, collection) => {
+        const updateData = {
+            $set: data
+        }
+        if (err) cb(err)
+        else collection.updateOne(target, updateData, (err, res) => {
+            if (err) cb(err)
+            else cb(null, res)
+        })
+    }) 
 }
