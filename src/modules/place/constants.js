@@ -5,3 +5,5 @@ export const events = {
     PLACE_LIST: 'place-list',
     PLACE_ERROR: 'place-error'
 }
+
+export const PLACE_COLLECTION = 'place'

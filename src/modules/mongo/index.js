@@ -5,7 +5,7 @@ import { Client } from 'mongodb'
 function connect(collection, cb) {
     Client.connect(URI, (err, db) => {
         if (err) cb(err)
-        else cb(null, db.db(DATABASE_NAME).collection(collection))
+        else cb(null, db.collection(collection))
         db.close()
     })
 }
