@@ -1,13 +1,17 @@
 import { PLACE_COLLECTION, events } from 'modules/place/constants'
 import { create, retrieve } from 'modules/mongo'
+import { resolveUser, resolveUserId } from 'modules/user'
 
-import { errors } from 'modules/mongo/constants'
+import { errors as mongoErrors } from 'modules/mongo/constants'
+import { errors as authErrors } from 'modules/auth/constants'
 import { throwError } from 'modules/error'
 
 export default function createPlace(socket, data) {
-    create(PLACE_COLLECTION, data, (err, place) => {
-        if (err) throwError(events.PLACE_ERROR, throwError(error))
-        else socket.emit(events.PLACE_LIST, place)
+    resolveUserId(socket.handshake.session.token, data, (err, resolveUserIdData) => {
+        if (err) socket.emit(events.PLACE_ERROR, throwError(authErrors))
+        create(PLACE_COLLECTION, resolveUserIdData, (err, place) => {
+            if (err) socket.emit(events.PLACE_ERROR, throwError(mongoErrors.MONGO_ERROR))
+        })
     })
 }
 
