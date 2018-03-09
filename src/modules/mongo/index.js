@@ -1,11 +1,11 @@
 import { DATABASE_NAME, MONGO_URI } from 'modules/mongo/constants'
 
-import { Client } from 'mongodb'
+import { MongoClient } from 'mongodb'
 
 function connect(collection, cb) {
-    Client.connect(URI, (err, db) => {
+    MongoClient.connect(MONGO_URI, (err, db) => {
         if (err) cb(err)
-        else cb(null, db.collection(collection))
+        else cb(null, db.db(DATABASE_NAME).collection(collection))
         db.close()
     })
 }
@@ -13,9 +13,9 @@ function connect(collection, cb) {
 export function create(collection, data, cb) {
     connect(collection, (err, collection) => {
         if (err) cb(err)
-        else collection.insertOne(data, (err, res) => {
+        else collection.insertOne(data, (err) => {
             if (err) cb(err)
-            else cb(null, res)
+            else cb(null, data)
         })
     })
 }

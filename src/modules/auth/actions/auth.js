@@ -14,7 +14,6 @@ function emitError(socket, error) {
 
 function authDataWithFB(socket, token) {
     getMe(token, (err, data) => {
-        console.log(err)
         if (!!err) emitError(socket, errors.INTERNAL_ERROR)
         else {
             if (data.error) emitError(socket, errors.UNAUTHORIZED)   

@@ -4,6 +4,7 @@ import DotEnv from 'dotenv'
 import Express from 'express'
 import Http from 'http'
 import MongoDB from 'mongodb'
+import Place from 'modules/place'
 import Session from 'modules/session'
 import Socket from 'socket.io'
 
@@ -23,6 +24,8 @@ io.on('connection', socket => {
   console.log('a user conected')
 
   Auth(socket)
+
+  Place(socket)
 
   socket.on('send-message', msg => {
     console.log(socket.handshake.address)
