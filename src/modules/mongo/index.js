@@ -10,8 +10,8 @@ function connect(collection, cb) {
     })
 }
 
-export function create(collection, data, cb) {
-    connect(collection, (err, collection) => {
+export function create(collectionName, data, cb) {
+    connect(collectionName, (err, collection) => {
         if (err) cb(err)
         else collection.insertOne(data, (err) => {
             if (err) cb(err)
@@ -20,8 +20,8 @@ export function create(collection, data, cb) {
     })
 }
 
-export function update(collection, target, data, cb) {
-    connect(collection, (err, collection) => {
+export function update(collectionName, target, data, cb) {
+    connect(collectionName, (err, collection) => {
         const updateData = {
             $set: data
         }
@@ -33,8 +33,8 @@ export function update(collection, target, data, cb) {
     }) 
 }
 
-export function retrieve(collection, target, cb) {
-    connect(collection, (err, collection) => {
+export function retrieve(collectionName, target, cb) {
+    connect(collectionName, (err, collection) => {
         collection.find({}, target, (err, res) => {
             if (err) cb(err)
             else cb(null, res)
@@ -42,9 +42,9 @@ export function retrieve(collection, target, cb) {
     })
 }
 
-export function list(collection, cb) {
-    connect(collection, (err, collection) => {
-        collection.find({}, (err, res) => {
+export function list(collectionName, cb) {
+    connect(collectionName, (err, collection) => {
+        collection.find().toArray((err, res) => {
             if (err) cb(err)
             else cb(null, res)
         })
