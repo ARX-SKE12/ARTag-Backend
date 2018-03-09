@@ -21,9 +21,9 @@ export function resolveUserId(accessToken, data, cb) {
 }
 
 export function resolveUserList(accessToken, data, cb) {
-    let promises = []
+    let ps = []
     data.map(datum => {
-        promises.push(
+        ps.push(
             new Promise(
                 (resolve, reject) => {
                     getUser(accessToken, datum.user, (err, userData) => {
@@ -33,7 +33,8 @@ export function resolveUserList(accessToken, data, cb) {
                 }
             ))
     })
-    Promise.all(promises).then(response => {
+
+    Promise.all(ps).then(response => {
         for(var index in data){
             data[index].user = response[index]
         }
