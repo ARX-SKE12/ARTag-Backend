@@ -14,6 +14,7 @@ function emitError(socket, error) {
 
 function authDataWithFB(socket, token) {
     getMe(token, (err, data) => {
+        console.log(err)
         if (!!err) emitError(socket, errors.INTERNAL_ERROR)
         else {
             if (data.error) emitError(socket, errors.UNAUTHORIZED)   
@@ -23,7 +24,7 @@ function authDataWithFB(socket, token) {
 }
 
 export default (socket, authData) => {
-    const token = auth_data.token
+    const token = authData.token
     if (token) authDataWithFB(socket, token)
     else emitError(socket, errors.TOKEN_LOST)
 }

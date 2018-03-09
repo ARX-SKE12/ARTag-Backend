@@ -9,8 +9,9 @@ function fetchFromFacebook(access_token, callback, id) {
         fields: REQUIRED_FIELDS
     }
     Request.get({
-        url:`${FACEBOOK_GRAPH_API}/${id}`,
-        qs
+        url:`${FACEBOOK_GRAPH_API_ROOT}/${id}`,
+        qs,
+        json: true
     }).then(res => callback(null, {
         id: res.id,
         name: res.name,
