@@ -5,6 +5,6 @@ export const errors = {
     INTERNAL_ERROR: 'Internal Error'
 }
 
-export function throwError (error) {
-    return { error }
+export function throwError (socket, event, error) {
+    socket.emit(event, { error })
 } 
