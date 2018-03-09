@@ -21,11 +21,22 @@ export function resolveUserId(accessToken, data, cb) {
 }
 
 export function resolveUserList(accessToken, data, cb) {
-    data.forEach(datum => {
-        getUser(accessToken, datum.user, (err, userData) => {
-            if (err) cb(err)
-            else datum.user = userData
-        })
+    let promises = []
+    data.map(datum => {
+        promises.push(
+            new Promise(
+                (resolve, reject) => {
+                    getUser(accessToken, datum.user, (err, userData) => {
+                        if (err) cb(err)
+                        else resolve(userData)
+                    })
+                }
+            ))
     })
-    cb(null, data)
+    Promise.all(promises).then(response => {
+        for(var index in data){
+            data[index].user = response[index]
+        }
+        cb(null, data)
+    })
 }
