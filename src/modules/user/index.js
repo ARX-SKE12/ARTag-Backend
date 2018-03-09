@@ -19,3 +19,13 @@ export function resolveUserId(accessToken, data, cb) {
         }
     })
 }
+
+export function resolveUserList(accessToken, data, cb) {
+    data.forEach(datum => {
+        getUser(accessToken, datum.user, (err, userData) => {
+            if (err) cb(err)
+            else datum.user = userData
+        })
+    })
+    cb(null, data)
+}
