@@ -33,7 +33,6 @@ export function resolveUserList(accessToken, data, cb) {
                 }
             ))
     })
-
     Promise.all(ps).then(response => {
         for(var index in data){
             data[index].user = response[index]
