@@ -20,7 +20,10 @@ export default (io, socket, placeData) => {
             if (placeUserObject.error) throwError(socket, events.PLACE_CREATE_ERROR, errors.UNAUTHORIZED)
             else create(PLACE_COLLECTION, initializePlaceObject(placeUserObject))
                     .then(res => resolveUserObject(token, res.ops[0])
-                                    .then(placeUserObject => socket.emit(events.PLACE_CREATE_SUCCESS, placeUserObject))
+                                    .then(placeUserObject => {
+                                        socket.emit(events.PLACE_CREATE_SUCCESS, placeUserObject)
+                                        io.sockets.emit(events.PLACE_DATA_UPDATE)
+                                    })
                                     .catch(() => throwError(socket, events.PLACE_CREATE_ERROR, errors.UNAUTHORIZED)))
                     .catch(() => throwError(socket, events.PLACE_CREATE_ERROR, errors.INTERNAL_ERROR))
         })
