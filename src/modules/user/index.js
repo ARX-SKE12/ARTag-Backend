@@ -20,24 +20,12 @@ export function resolveSelfObject(accessToken, data) {
     }).catch(err => err)
 }
 
-export function resolveUserList(accessToken, data, cb) {
-    let ps = []
-    data.map(datum => {
-        ps.push(
-            new Promise(
-                (resolve, reject) => {
-                    getUser(accessToken, datum.user, (err, userData) => {
-                        if (err) cb(err)
-                        else resolve(userData)
-                    })
-                }
-            ))
-    })
-
-    Promise.all(ps).then(response => {
-        for(var index in data){
-            data[index].user = response[index]
-        }
-        cb(null, data)
-    })
+export function resolveUserList(accessToken, data) {
+    const userPromises = data.map(datum => getUser(accessToken, datum.user))
+    return Promise.all(userPromises)
+                .then(userList => {
+                    for (let index in data) data[index].user = userList[index]
+                    return data
+                })
+                .catch(err => err)
 }

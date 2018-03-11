@@ -5,6 +5,6 @@ import retrievePlace from 'modules/place/actions/retrievePlace'
 
 export default (io, socket) => {
     socket.on(events.PLACE_CREATE, data => createPlace(io, socket, data))
-    socket.on(events.PLACE_LIST, () => listPlace(socket))
+    socket.on(events.PLACE_LIST_REQUEST, () => listPlace(socket))
     socket.on(events.PLACE_RETRIEVE, data => retrievePlace(socket, data))
 }

@@ -32,11 +32,6 @@ export function retrieve(collectionName, target, cb) {
     })
 }
 
-export function list(collectionName, cb) {
-    connect(collectionName, (err, collection) => {
-        collection.find().toArray((err, res) => {
-            if (err) cb(err)
-            else cb(null, res)
-        })
-    })
+export function list(collectionName) {
+    return connect(collectionName).then(collection => collection.find()).catch(err => err)
 }
