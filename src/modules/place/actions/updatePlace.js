@@ -4,7 +4,6 @@ import { retrieve, update } from 'modules/mongo'
 
 import { PLACE_COLLECTION } from 'modules/place/constants'
 import events from 'modules/place/events'
-import msgs from 'modules/place/msgs'
 
 export default (io, socket, data) => {
     const { token, user } = socket.handshake.session
