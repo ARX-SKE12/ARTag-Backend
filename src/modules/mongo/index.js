@@ -10,26 +10,12 @@ export function create(collectionName, data) {
     return connect(collectionName).then(collection => collection.insert(data)).catch(err => err)
 }
 
-export function update(collectionName, target, data, cb) {
-    connect(collectionName, (err, collection) => {
-        const updateData = {
-            $set: data
-        }
-        if (err) cb(err)
-        else collection.updateOne(target, updateData, (err, res) => {
-            if (err) cb(err)
-            else cb(null, res)
-        })
-    }) 
+export function update(collectionName, id, data) {
+    return connect(collectionName).then(collection => collection.updateById(id, data)).catch(err => err)
 }
 
-export function retrieve(collectionName, target, cb) {
-    connect(collectionName, (err, collection) => {
-        collection.findOne({}, target, (err, res) => {
-            if (err) cb(err)
-            else cb(null, res)
-        })
-    })
+export function retrieve(collectionName, id) {
+    return connect(collectionName).then(collection => collection.findById(id)).catch(err => err)
 }
 
 export function list(collectionName) {

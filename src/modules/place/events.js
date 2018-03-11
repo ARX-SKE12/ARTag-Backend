@@ -6,5 +6,8 @@ export default {
     PLACE_DATA_UPDATE: 'place-data-update',
     PLACE_LIST: 'place-list',
     PLACE_LIST_REQUEST: 'place-list-request',
-    PLACE_LIST_ERROR: 'place-list-error'
+    PLACE_LIST_ERROR: 'place-list-error',
+    PLACE_UPDATE: 'place-update',
+    PLACE_UPDATE_SUCCESS: 'place-update-success',
+    PLACE_UPDATE_ERROR: 'place-update-error'
 }
