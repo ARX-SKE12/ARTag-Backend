@@ -3,7 +3,9 @@
   "version": "0.1.1",
   "description": "Backend for ARTag",
   "scripts": {
-    "server": "nodemon ./src/index.js --exec babel-node"
+    "server": "nodemon ./src/index.js --exec babel-node",
+    "build": "babel -d ./build ./src",
+    "run-production": "node build/index.js"
   },
   "dependencies": {
     "body-parser": "^1.18.2",
@@ -12,6 +14,7 @@
     "express": "^4.15.2",
     "express-session": "^1.15.6",
     "mongodb-bluebird": "^0.1.2",
+    "request": "^2.83.0",
     "request-promise": "^4.2.2",
     "socket.io": "^2.0.4"
   },
