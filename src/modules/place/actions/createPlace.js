@@ -4,7 +4,6 @@ import { resolveSelfObject, resolveUserObject } from 'modules/user'
 import { PLACE_COLLECTION } from 'modules/place/constants'
 import { create } from 'modules/mongo'
 import events from 'modules/place/events'
-import msgs from 'modules/place/msgs'
 
 function initializePlaceObject(placeObject) {
     placeObject.is_active = true
@@ -23,7 +22,7 @@ export default (io, socket, placeData) => {
                     .then(res => resolveUserObject(token, res.ops[0])
                                     .then(placeUserObject => {
                                         socket.emit(events.PLACE_CREATE_SUCCESS, placeUserObject)
-                                        io.sockets.emit(events.PLACE_DATA_UPDATE, { msg: msgs.NEW_PLACE})
+                                        io.sockets.emit(events.PLACE_DATA_UPDATE)
                                     })
                                     .catch(() => throwError(socket, events.PLACE_CREATE_ERROR, errors.UNAUTHORIZED)))
                     .catch(() => throwError(socket, events.PLACE_CREATE_ERROR, errors.INTERNAL_ERROR))
