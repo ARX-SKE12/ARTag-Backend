@@ -11,7 +11,6 @@ function initializePlaceObject(placeObject) {
     placeObject.timestamp = Date.now()
     placeObject.meshes = []
     placeObject.tags = []
-    placeObject.contributors = [ placeObject.user ]
     return placeObject
 }
 
