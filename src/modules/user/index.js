@@ -1,23 +1,23 @@
 import { getMe, getUser } from 'modules/facebook'
 
-export function resolveUser(accessToken, data, cb) {
-    getUser(accessToken, data.user, (err, userData) => {
-        if (err) cb(err)
+export function resolveUserObject(accessToken, data) {
+    return getUser(accessToken, data.user).then(user => {
+        if (user.error) return user.error
         else {
-            data.user = userData
-            cb(null, data)
+            data.user = user
+            return data
         }
-    })
+    }).catch(err => err)
 }
 
-export function resolveUserId(accessToken, data, cb) {
-    getMe(accessToken, (err, userData) => {
-        if (err) cb(err)
+export function resolveSelfObject(accessToken, data) {
+    return getMe(accessToken).then(user => {
+        if (user.error) return user.error
         else {
-            data.user = userData.id
-            cb(null, data)
+            data.user = user.id
+            return data
         }
-    })
+    }).catch(err => err)
 }
 
 export function resolveUserList(accessToken, data, cb) {

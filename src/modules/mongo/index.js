@@ -1,23 +1,13 @@
 import { DATABASE_NAME, MONGO_URI } from 'modules/mongo/constants'
 
-import { MongoClient } from 'mongodb'
+import Mongo from 'mongodb-bluebird'
 
-function connect(collection, cb) {
-    MongoClient.connect(MONGO_URI, (err, db) => {
-        if (err) cb(err)
-        else cb(null, db.db(DATABASE_NAME).collection(collection))
-        db.close()
-    })
+function connect(collection) {
+    return Mongo.connect(MONGO_URI).then(db => db.collection(collection)).catch(err => err)
 }
 
-export function create(collectionName, data, cb) {
-    connect(collectionName, (err, collection) => {
-        if (err) cb(err)
-        else collection.insertOne(data, (err) => {
-            if (err) cb(err)
-            else cb(null, data)
-        })
-    })
+export function create(collectionName, data) {
+    return connect(collectionName).then(collection => collection.insert(data)).catch(err => err)
 }
 
 export function update(collectionName, target, data, cb) {

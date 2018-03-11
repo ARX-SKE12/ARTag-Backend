@@ -1,10 +1,10 @@
-import Auth from 'modules/auth'
+import AuthEvent from 'modules/auth'
 import BodyParser from 'modules/body-parser'
 import DotEnv from 'dotenv'
 import Express from 'express'
 import Http from 'http'
 import MongoDB from 'mongodb'
-import Place from 'modules/place'
+import PlaceEvent from 'modules/place'
 import Session from 'modules/session'
 import Socket from 'socket.io'
 
@@ -23,9 +23,9 @@ const PORT = process.env.BACKEND_PORT
 io.on('connection', socket => {
   console.log('a user conected')
 
-  Auth(socket)
+  AuthEvent(socket)
 
-  Place(socket)
+  PlaceEvent(io, socket)
 
   socket.on('send-message', msg => {
     console.log(socket.handshake.address)
