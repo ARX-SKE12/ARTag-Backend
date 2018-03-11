@@ -1,52 +1,23 @@
 import { DATABASE_NAME, MONGO_URI } from 'modules/mongo/constants'
 
-import { MongoClient } from 'mongodb'
+import Mongo from 'mongodb-bluebird'
 
-function connect(collection, cb) {
-    MongoClient.connect(MONGO_URI, (err, db) => {
-        if (err) cb(err)
-        else cb(null, db.db(DATABASE_NAME).collection(collection))
-        db.close()
-    })
+function connect(collection) {
+    return Mongo.connect(MONGO_URI).then(db => db.collection(collection)).catch(err => err)
 }
 
-export function create(collectionName, data, cb) {
-    connect(collectionName, (err, collection) => {
-        if (err) cb(err)
-        else collection.insertOne(data, (err) => {
-            if (err) cb(err)
-            else cb(null, data)
-        })
-    })
+export function create(collectionName, data) {
+    return connect(collectionName).then(collection => collection.insert(data)).catch(err => err)
 }
 
-export function update(collectionName, target, data, cb) {
-    connect(collectionName, (err, collection) => {
-        const updateData = {
-            $set: data
-        }
-        if (err) cb(err)
-        else collection.updateOne(target, updateData, (err, res) => {
-            if (err) cb(err)
-            else cb(null, res)
-        })
-    }) 
+export function update(collectionName, id, data) {
+    return connect(collectionName).then(collection => collection.updateById(id, data)).catch(err => err)
 }
 
-export function retrieve(collectionName, target, cb) {
-    connect(collectionName, (err, collection) => {
-        collection.findOne({}, target, (err, res) => {
-            if (err) cb(err)
-            else cb(null, res)
-        })
-    })
+export function retrieve(collectionName, id) {
+    return connect(collectionName).then(collection => collection.findById(id)).catch(err => err)
 }
 
-export function list(collectionName, cb) {
-    connect(collectionName, (err, collection) => {
-        collection.find().toArray((err, res) => {
-            if (err) cb(err)
-            else cb(null, res)
-        })
-    })
+export function list(collectionName) {
+    return connect(collectionName).then(collection => collection.find()).catch(err => err)
 }

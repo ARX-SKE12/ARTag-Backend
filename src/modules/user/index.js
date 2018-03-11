@@ -1,43 +1,31 @@
 import { getMe, getUser } from 'modules/facebook'
 
-export function resolveUser(accessToken, data, cb) {
-    getUser(accessToken, data.user, (err, userData) => {
-        if (err) cb(err)
+export function resolveUserObject(accessToken, data) {
+    return getUser(accessToken, data.user).then(user => {
+        if (user.error) return user.error
         else {
-            data.user = userData
-            cb(null, data)
+            data.user = user
+            return data
         }
-    })
+    }).catch(err => err)
 }
 
-export function resolveUserId(accessToken, data, cb) {
-    getMe(accessToken, (err, userData) => {
-        if (err) cb(err)
+export function resolveSelfObject(accessToken, data) {
+    return getMe(accessToken).then(user => {
+        if (user.error) return user.error
         else {
-            data.user = userData.id
-            cb(null, data)
+            data.user = user.id
+            return data
         }
-    })
+    }).catch(err => err)
 }
 
-export function resolveUserList(accessToken, data, cb) {
-    let ps = []
-    data.map(datum => {
-        ps.push(
-            new Promise(
-                (resolve, reject) => {
-                    getUser(accessToken, datum.user, (err, userData) => {
-                        if (err) cb(err)
-                        else resolve(userData)
-                    })
-                }
-            ))
-    })
-
-    Promise.all(ps).then(response => {
-        for(var index in data){
-            data[index].user = response[index]
-        }
-        cb(null, data)
-    })
+export function resolveUserList(accessToken, data) {
+    const userPromises = data.map(datum => getUser(accessToken, datum.user))
+    return Promise.all(userPromises)
+                .then(userList => {
+                    for (let index in data) data[index].user = userList[index]
+                    return data
+                })
+                .catch(err => err)
 }

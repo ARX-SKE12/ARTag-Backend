@@ -6,12 +6,10 @@ import { list } from 'modules/mongo'
 import { resolveUserList } from 'modules/user'
 
 export default socket => {
-    const token = socket.handshake.session.token
-    list(PLACE_COLLECTION, (err, places) => {
-        if (err) throwError(socket, events.PLACE_ERROR, errors.INTERNAL_ERROR)
-        else resolveUserList(token, places, (err, resolvedPlaces) => {
-            if (err) throwError(socket, events.PLACE_ERROR, errors.INTERNAL_ERROR)
-            else socket.emit(events.PLACE_LIST, resolvedPlaces)
-        })
-    })
+    const { token } = socket.handshake.session
+    list(PLACE_COLLECTION)
+        .then(placeList => resolveUserList(token, placeList)
+                                .then(placeUserList => socket.emit(events.PLACE_LIST, placeUserList))
+                                .catch(err => throwError(socket, events.PLACE_LIST_ERROR, errors.INTERNAL_ERROR)))
+        .catch(err => throwError(socket, events.PLACE_LIST_ERROR, errors.INTERNAL_ERROR))
 }

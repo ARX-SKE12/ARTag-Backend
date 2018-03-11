@@ -1,32 +1,32 @@
 import { errors, throwError } from 'modules/error'
-import { resolveUser, resolveUserId } from 'modules/user'
+import { resolveSelfObject, resolveUserObject } from 'modules/user'
 
 import { PLACE_COLLECTION } from 'modules/place/constants'
 import { create } from 'modules/mongo'
 import events from 'modules/place/events'
+import msgs from 'modules/place/msgs'
 
-function resolvePlaceUser(socket, token, placeData) {
-    resolveUser(token, placeData, (err, resolvedUserData) => {
-        if (err) throwError(socket, events.PLACE_ERROR, errors.INTERNAL_ERROR)
-        else socket.emit(events.PLACE_CREATE, resolvedUserData)
-    })
+function initializePlaceObject(placeObject) {
+    placeObject.is_active = true
+    placeObject.timestamp = Date.now()
+    placeObject.meshes = []
+    placeObject.tags = []
+    return placeObject
 }
 
-function createPlace(socket, token, placeData) {
-    create(PLACE_COLLECTION, placeData, (err, place) => {
-        if (err) throwError(socket, events.PLACE_ERROR, errors.INTERNAL_ERROR)
-        else resolvePlaceUser(socket, token, place)
-    })
-}
-
-function resolvePlaceCreator(socket, token, placeData) {
-    resolveUserId(token, placeData, (err, resolvedUserIdPlaceData) => {
-      if (err) throwError(socket, events.PLACE_ERROR, errors.INTERNAL_ERROR)
-      else createPlace(socket, token, resolvedUserIdPlaceData)
-    })
-}
-
-export default (socket, placeData) => {
-    const token = socket.handshake.session.token
-    resolvePlaceCreator(socket, token, placeData)
+export default (io, socket, placeData) => {
+    const { token } = socket.handshake.session
+    resolveSelfObject(token, placeData)
+        .then(placeUserObject => {
+            if (placeUserObject.error) throwError(socket, events.PLACE_CREATE_ERROR, errors.UNAUTHORIZED)
+            else create(PLACE_COLLECTION, initializePlaceObject(placeUserObject))
+                    .then(res => resolveUserObject(token, res.ops[0])
+                                    .then(placeUserObject => {
+                                        socket.emit(events.PLACE_CREATE_SUCCESS, placeUserObject)
+                                        io.sockets.emit(events.PLACE_DATA_UPDATE, { msg: msgs.NEW_PLACE})
+                                    })
+                                    .catch(() => throwError(socket, events.PLACE_CREATE_ERROR, errors.UNAUTHORIZED)))
+                    .catch(() => throwError(socket, events.PLACE_CREATE_ERROR, errors.INTERNAL_ERROR))
+        })
+        .catch(() => throwError(socket, events.PLACE_CREATE_ERROR, errors.UNAUTHORIZED))
 }

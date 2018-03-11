@@ -5,6 +5,7 @@ import { getMe } from 'modules/facebook'
 
 function emitSuccess(socket, userData, token) {
     socket.handshake.session.token = token
+    socket.handshake.session.user = userData.id
     socket.emit(events.AUTH_SUCCESS, userData)
 }
 
@@ -13,13 +14,10 @@ function emitError(socket, error) {
 }
 
 function authDataWithFB(socket, token) {
-    getMe(token, (err, data) => {
-        if (!!err) emitError(socket, errors.INTERNAL_ERROR)
-        else {
-            if (data.error) emitError(socket, errors.UNAUTHORIZED)   
-            else emitSuccess(socket, data, token)
-        }
-    })
+    getMe(token).then(data => {
+        if (data.error) emitError(socket, errors.UNAUTHORIZED)
+        else emitSuccess(socket, data, token)
+    }).catch(err => emitError(socket, errors.INTERNAL_ERROR))
 }
 
 export default (socket, authData) => {
