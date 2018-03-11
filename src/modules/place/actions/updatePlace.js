@@ -7,5 +7,6 @@ import msgs from 'modules/place/msgs'
 import { update } from 'modules/mongo'
 
 export default (io, socket, data) => {
+    const { token, user } = socket.handshake.session
     
 }

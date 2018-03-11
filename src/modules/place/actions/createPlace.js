@@ -15,7 +15,7 @@ function initializePlaceObject(placeObject) {
 }
 
 export default (io, socket, placeData) => {
-    const token = socket.handshake.session.token
+    const { token } = socket.handshake.session
     resolveSelfObject(token, placeData)
         .then(placeUserObject => {
             if (placeUserObject.error) throwError(socket, events.PLACE_CREATE_ERROR, errors.UNAUTHORIZED)

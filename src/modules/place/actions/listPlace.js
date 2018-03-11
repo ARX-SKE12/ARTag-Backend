@@ -6,7 +6,7 @@ import { list } from 'modules/mongo'
 import { resolveUserList } from 'modules/user'
 
 export default socket => {
-    const token = socket.handshake.session.token
+    const { token } = socket.handshake.session
     list(PLACE_COLLECTION)
         .then(placeList => resolveUserList(token, placeList)
                                 .then(placeUserList => socket.emit(events.PLACE_LIST, placeUserList))
