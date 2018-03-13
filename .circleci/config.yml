@@ -41,3 +41,10 @@ workflows:
     jobs:
       - build
 
+      - deploy-docker:
+        filters:
+          branches:
+            only:
+            - master
+        requires:
+          - build
