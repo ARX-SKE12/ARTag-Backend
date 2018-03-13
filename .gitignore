@@ -60,3 +60,6 @@ typings/
 
 # Production
 build
+
+# Config file
+*.config.json

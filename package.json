@@ -8,6 +8,7 @@
     "run-production": "node build/index.js"
   },
   "dependencies": {
+    "@google-cloud/datastore": "^1.3.5",
     "body-parser": "^1.18.2",
     "connect-mongo": "^2.0.1",
     "dotenv": "^5.0.0",
