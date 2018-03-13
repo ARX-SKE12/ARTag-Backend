@@ -22,6 +22,12 @@ jobs:
           key: v1-dependencies-{{ checksum "package.json" }}
 
   deploy-docker:
+    machine: true
+    
+    branches:
+      only:
+        - master
+
     docker:
       - image: circleci/node:9.8
 
@@ -42,5 +48,3 @@ workflows:
     jobs:
       - build
       - deploy-docker
-
-      
