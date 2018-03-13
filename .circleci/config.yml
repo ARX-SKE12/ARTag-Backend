@@ -24,9 +24,10 @@ jobs:
   deploy-docker:
     machine: true
 
-    branches:
-      only:
-        - master
+    filters:
+      branches:
+        only:
+          - master
 
     working_directory: ~/repo
 
@@ -35,9 +36,9 @@ jobs:
 
       - run: docker login -u $DOCKER_USER -p $DOCKER_PASS
 
-      - run: docker build -t yukireii/artag-backend:latest .
+      - run: docker build -t $DOCKER_USER/$DOCKER_IMAGE_NAME .
 
-      - run: docker push yukireii/artag-backend:latest
+      - run: docker push $DOCKER_USER/$DOCKER_IMAGE_NAME
 
 workflows:
   version: 2
