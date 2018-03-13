@@ -28,6 +28,9 @@ jobs:
       branches:
         only: master
 
+    requires:
+      - build
+
     working_directory: ~/repo
 
     steps:
@@ -46,5 +49,3 @@ workflows:
       - build
 
       - deploy-docker
-        requires: 
-          - build
