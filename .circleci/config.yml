@@ -24,8 +24,7 @@ jobs:
   deploy-docker:
     machine: true
 
-    branches:
-      only: master
+    branch: master
 
     working_directory: ~/repo
 
