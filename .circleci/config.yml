@@ -40,12 +40,4 @@ workflows:
   build_and_deploy:
     jobs:
       - build:
-        type: approval
 
-      - deploy-docker:
-        filters:
-          branches:
-                only:
-                 - master
-        requires:
-          - build
