@@ -23,10 +23,6 @@ jobs:
 
   deploy-docker:
     machine: true
-    
-    branches:
-      only:
-        - master
 
     docker:
       - image: circleci/node:9.8
