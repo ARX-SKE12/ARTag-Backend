@@ -3,10 +3,21 @@
   "version": "0.1.1",
   "description": "Backend for ARTag",
   "scripts": {
+    "start": "npm run server",
     "server": "nodemon ./src/index.js --exec babel-node",
     "build": "babel -d ./build ./src",
-    "run-production": "node build/index.js"
+    "production": "node build/index.js"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ARX-SKE12/ARTag-Logging-Server.git"
+  },
+  "author": "ARX-SKE12",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ARX-SKE12/ARTag-Logging-Server/issues"
+  },
+  "homepage": "https://github.com/ARX-SKE12/ARTag-Logging-Server#readme",
   "dependencies": {
     "@google-cloud/datastore": "^1.3.5",
     "body-parser": "^1.18.2",
