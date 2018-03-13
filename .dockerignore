@@ -1,0 +1,10 @@
+.git
+.circleci
+.env
+*.config.json
+README.md
+.gitignore
+node_modules
+package-lock.json
+yarn.lock
+*.log
