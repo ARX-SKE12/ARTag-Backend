@@ -27,7 +27,7 @@ jobs:
     filters:
       branches:
         only:
-        - master
+          - master
 
     working_directory: ~/repo
 
