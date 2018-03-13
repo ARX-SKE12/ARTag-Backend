@@ -24,8 +24,6 @@ jobs:
   deploy-docker:
     machine: true
 
-    requires: build
-
     branches:
       only: master
 
