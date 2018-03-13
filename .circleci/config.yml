@@ -40,8 +40,11 @@ workflows:
   build_and_deploy:
     jobs:
       - build
+      
       - deploy-docker:
         requires:
           - build
-        branches:
-              only: master
+        filters:
+          branches:
+                only:
+                 - master
