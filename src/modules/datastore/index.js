@@ -21,7 +21,6 @@ export function retrieve(kind, id) {
 }
 
 export function list(kind) {
-    const key = datastore.key([ kind ])
-    const query = datastore.createQuery(key)
+    const query = datastore.createQuery(kind)
     return datastore.runQuery(query)
 }
