@@ -1,3 +1,3 @@
-import Socket from 'modules/socket'
+import Socket from 'core/socket'
 
 Socket()

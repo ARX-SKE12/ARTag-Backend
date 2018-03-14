@@ -1,4 +1,4 @@
-import { FACEBOOK_GRAPH_API_ROOT, ME, REQUIRED_FIELDS } from 'modules/facebook/constants'
+import { FACEBOOK_GRAPH_API_ROOT, ME, REQUIRED_FIELDS } from 'utils/facebook/constants'
 
 import Request from 'request-promise'
 

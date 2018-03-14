@@ -1,4 +1,4 @@
-import { getMe, getUser } from 'modules/facebook'
+import { getMe, getUser } from 'utils/facebook'
 
 export function resolveUserObject(accessToken, data) {
     return getUser(accessToken, data.user).then(user => {

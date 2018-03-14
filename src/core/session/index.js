@@ -1,6 +1,6 @@
 import ExpressSession from 'express-session'
-import { SESSION_SECRET_KEY } from 'modules/session/constants'
-import store from 'modules/session/store'
+import { SESSION_SECRET_KEY } from 'core/session/constants'
+import store from 'core/session/store'
 
 const session = ExpressSession({
     secret: SESSION_SECRET_KEY,

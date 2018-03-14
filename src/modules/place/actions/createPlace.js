@@ -1,8 +1,8 @@
-import { errors, throwError } from 'modules/error'
-import { resolveSelfObject, resolveUserObject } from 'modules/user'
+import { errors, throwError } from 'utils/error'
+import { resolveSelfObject, resolveUserObject } from 'utils/user'
 
 import { PLACE_KIND } from 'modules/place/constants'
-import { create } from 'modules/datastore'
+import { create } from 'utils/datastore'
 import events from 'modules/place/events'
 
 function initializePlaceObject(placeObject) {

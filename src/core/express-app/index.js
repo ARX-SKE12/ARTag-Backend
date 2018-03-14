@@ -1,4 +1,4 @@
-import BodyParser from 'modules/body-parser'
+import BodyParser from 'core/body-parser'
 import Express from 'express'
 
 const app = Express()

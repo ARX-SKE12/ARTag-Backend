@@ -1,6 +1,6 @@
-import { errors, throwError } from 'modules/error'
-import { resolveSelfObject, resolveUserObject } from 'modules/user'
-import { retrieve, update } from 'modules/datastore'
+import { errors, throwError } from 'utils/error'
+import { resolveSelfObject, resolveUserObject } from 'utils/user'
+import { retrieve, update } from 'utils/datastore'
 
 import { PLACE_KIND } from 'modules/place/constants'
 import events from 'modules/place/events'

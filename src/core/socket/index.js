@@ -1,11 +1,11 @@
 import AuthEvent from 'modules/auth'
-import ExpressApp from 'modules/express-app'
+import ExpressApp from 'core/express-app'
 import PlaceEvent from 'modules/place'
 import RoomEvent from 'modules/room'
-import Server from 'modules/server'
-import Session from 'modules/session'
+import Server from 'core/server'
+import Session from 'core/session'
 import Socket from 'socket.io'
-import events from 'modules/socket/events'
+import events from 'core/socket/events'
 
 export default () => {
     const io = Socket(Server)

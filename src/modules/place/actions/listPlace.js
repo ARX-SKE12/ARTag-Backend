@@ -1,9 +1,9 @@
-import { errors, throwError } from 'modules/error'
+import { errors, throwError } from 'utils/error'
 
 import { PLACE_KIND } from 'modules/place/constants'
 import events from 'modules/place/events'
-import { list } from 'modules/datastore'
-import { resolveUserList } from 'modules/user'
+import { list } from 'utils/datastore'
+import { resolveUserList } from 'utils/user'
 
 export default socket => {
     const { token } = socket.handshake.session
