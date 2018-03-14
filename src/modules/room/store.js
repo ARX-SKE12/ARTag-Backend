@@ -1,3 +1,4 @@
+import { resolveUserList } from 'utils/user'
 
 class RoomManager {
 
@@ -18,6 +19,11 @@ class RoomManager {
         const index = this.rooms[placeId].indexOf(clientId)
         if (index > -1) this.rooms[placeId].splice(index, 1)
     }
+
+    getPeople(accessToken, placeId) {
+        return resolveUserList(accessToken, this.rooms[placeId])
+    }
+
 }
 
 export default new RoomManager()
