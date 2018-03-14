@@ -24,13 +24,6 @@ jobs:
   deploy-docker:
     machine: true
 
-    filters:
-      branches:
-        only: master
-
-    requires:
-      - build
-
     working_directory: ~/repo
 
     steps:
@@ -48,4 +41,9 @@ workflows:
     jobs:
       - build
 
-      - deploy-docker
+      - deploy-docker:
+          filters:
+            branches:
+              only: master
+          requires:
+            - build
