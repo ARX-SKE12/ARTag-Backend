@@ -8,6 +8,7 @@ export default (io, socket, placeData) => {
     const { placeId } = placeData
     Room.joinRoom(placeId, user)
     socket.join(placeId)
+    socket.handshake.currentRoom = placeId
     Room.getPeople(token, placeId)
         .then(userList => {
             const updateData = {
