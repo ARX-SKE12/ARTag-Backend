@@ -6,6 +6,7 @@ import RoomEvent from 'modules/room'
 import Server from 'core/server'
 import Session from 'core/session'
 import Socket from 'socket.io'
+import TagEvent from 'modules/tag'
 import events from 'core/socket/events'
 
 export default () => {
@@ -27,5 +28,7 @@ export default () => {
 
         RoomEvent(io, socket)
 
+        TagEvent(io, socket)
+        
     })
 }
