@@ -1,5 +1,5 @@
 import Datastore from '@google-cloud/datastore'
-import PROJECT_ID from 'modules/datastore/constants'
+import PROJECT_ID from 'utils/datastore/constants'
 
 const datastore = Datastore({ projectId: PROJECT_ID })
 

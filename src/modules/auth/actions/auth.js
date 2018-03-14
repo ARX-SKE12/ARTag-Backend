@@ -1,7 +1,7 @@
-import { errors, throwError } from 'modules/error'
+import { errors, throwError } from 'utils/error'
 
 import events from 'modules/auth/events'
-import { getMe } from 'modules/facebook'
+import { getMe } from 'utils/facebook'
 
 function emitSuccess(socket, userData, token) {
     socket.handshake.session.token = token

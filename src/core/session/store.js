@@ -1,4 +1,4 @@
-import { GC_APP_CREDENTIALS, GC_PROJECT_ID, SESSION_PREFIX } from 'modules/session/constants'
+import { GC_APP_CREDENTIALS, GC_PROJECT_ID, SESSION_PREFIX } from 'core/session/constants'
 
 import ConnectDatastore from '@google-cloud/connect-datastore'
 import Datastore from '@google-cloud/datastore'
