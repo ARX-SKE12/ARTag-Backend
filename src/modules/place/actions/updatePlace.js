@@ -1,6 +1,6 @@
 import { errors, throwError } from 'modules/error'
 import { resolveSelfObject, resolveUserObject } from 'modules/user'
-import { retrieve, update } from 'modules/mongo'
+import { retrieve, update } from 'modules/datastore'
 
 import { PLACE_KIND } from 'modules/place/constants'
 import events from 'modules/place/events'

@@ -1,11 +1,15 @@
-import ConnectMongo from 'connect-mongo'
+import { GC_APP_CREDENTIALS, GC_PROJECT_ID, SESSION_PREFIX } from 'modules/session/constants'
+
+import ConnectDatastore from '@google-cloud/connect-datastore'
+import Datastore from '@google-cloud/datastore'
 import ExpressSession from 'express-session'
-import { MONGO_URI } from 'modules/session/constants'
 
-const MongoStore = ConnectMongo(ExpressSession)
+const DatastoreStore = ConnectDatastore(ExpressSession)
 
-const store = new MongoStore({
-    url: MONGO_URI
+export default new DatastoreStore({
+    dataset: Datastore({
+        prefix: SESSION_PREFIX,
+        projectId: GC_PROJECT_ID,
+        keyFilename: GC_APP_CREDENTIALS
+    })
 })
-
-export default store
