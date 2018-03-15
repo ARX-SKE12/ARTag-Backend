@@ -8,16 +8,20 @@ export default (io, socket) => {
     const { user, token, currentRoom } = socket.handshake.session
     socket.leave(currentRoom)
     Room.leaveRoom(currentRoom, user)
+            .then(() => {
+                Room.getPeople(token, currentRoom)
+                        .then(userList => getMe(token)
+                                            .then(currentUser => {
+                                            const updateData = {
+                                                left: currentUser,
+                                                userList: Array.from(new Set(userList))
+                                            }
+                                            io.to(currentRoom).emit(events.ROOM_USER_LEFT, updateData)
+                                            })
+                                            .catch(err => throwError(socket, events.ROOM_ERROR, errors.UNAUTHORIZED)))
+                        .catch(err => throwError(socket, events.ROOM_ERROR, errors.UNAUTHORIZED))
+            })
+            .catch(err => throwError(socket, events.ROOM_ERROR, errors.UNAUTHORIZED))
     delete socket.handshake.session.currentRoom
-    Room.getPeople(token, currentRoom)
-        .then(userList => getMe(token)
-                            .then(currentUser => {
-                               const updateData = {
-                                   left: currentUser,
-                                   userList: Array.from(new Set(userList))
-                               }
-                               io.to(currentRoom).emit(events.ROOM_USER_LEFT, updateData)
-                            })
-                            .catch(err => throwError(socket, events.ROOM_ERROR, errors.UNAUTHORIZED)))
-        .catch(err => throwError(socket, events.ROOM_ERROR, errors.UNAUTHORIZED))
+    
 }
