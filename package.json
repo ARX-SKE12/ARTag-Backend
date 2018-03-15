@@ -30,7 +30,8 @@
     "redis": "^2.8.0",
     "request": "^2.83.0",
     "request-promise": "^4.2.2",
-    "socket.io": "^2.0.4"
+    "socket.io": "^2.0.4",
+    "socket.io-redis": "^5.2.0"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
