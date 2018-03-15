@@ -1,15 +1,14 @@
-import { GC_APP_CREDENTIALS, GC_PROJECT_ID, SESSION_PREFIX } from 'core/session/constants'
+import { REDIS_HOST, REDIS_PORT } from 'core/session/constants'
 
-import ConnectDatastore from '@google-cloud/connect-datastore'
-import Datastore from '@google-cloud/datastore'
+import ConnectRedis from 'connect-redis'
 import ExpressSession from 'express-session'
+import Redis from 'redis'
 
-const DatastoreStore = ConnectDatastore(ExpressSession)
+const RedisStore = ConnectRedis(ExpressSession)
+const RedisClient = Redis.createClient()
 
-export default new DatastoreStore({
-    dataset: Datastore({
-        prefix: SESSION_PREFIX,
-        projectId: GC_PROJECT_ID,
-        keyFilename: GC_APP_CREDENTIALS
-    })
+export default new RedisStore({
+    host: REDIS_HOST,
+    port: REDIS_PORT,
+    client: RedisClient
 })

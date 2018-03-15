@@ -1,3 +1,4 @@
+import Adapter from 'core/adapter'
 import AuthEvent from 'modules/auth'
 import ExpressApp from 'core/express-app'
 import PlaceEvent from 'modules/place'
@@ -9,6 +10,8 @@ import events from 'core/socket/events'
 
 export default () => {
     const io = Socket(Server)
+
+    Adapter(io)
 
     Session(ExpressApp, io)
 
