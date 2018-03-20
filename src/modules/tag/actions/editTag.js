@@ -1,4 +1,4 @@
 
-export default (io, socket, tagData) => {
+export default (socket, tagData, io) => {
     
 }

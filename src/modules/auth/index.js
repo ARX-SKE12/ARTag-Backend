@@ -1,7 +1,4 @@
-import auth from 'modules/auth/actions/auth'
-import { eventJSONHandler } from 'utils/socket'
-import events from 'modules/auth/events'
+import mapper from 'modules/auth/mapper'
+import { socketMapper } from 'utils/socket'
 
-export default socket => {
-    eventJSONHandler(socket, events.AUTH, data => auth(socket, data))
-}
+export default socket => socketMapper(socket, mapper)
