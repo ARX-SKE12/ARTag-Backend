@@ -4,7 +4,7 @@ import Room from 'modules/room/store'
 import events from 'modules/room/events'
 import { getMe } from 'utils/facebook'
 
-export default (io, socket) => {
+export default (socket, data, io) => {
     const { user, token, currentRoom } = socket.handshake.session
     socket.leave(currentRoom)
     Room.leaveRoom(currentRoom, user)

@@ -13,7 +13,7 @@ function initializePlaceObject(placeObject) {
     return placeObject
 }
 
-export default (io, socket, placeData) => {
+export default (socket, placeData, io) => {
     const { token } = socket.handshake.session
     resolveSelfObject(token, placeData)
         .then(placeUserObject => {

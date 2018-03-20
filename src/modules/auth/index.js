@@ -1,6 +1,4 @@
-import auth from 'modules/auth/actions/auth'
-import events from 'modules/auth/events'
+import mapper from 'modules/auth/mapper'
+import { socketMapper } from 'utils/socket'
 
-export default socket => {
-    socket.on(events.AUTH, authData => auth(socket, authData))
-}
+export default socket => socketMapper(socket, mapper)

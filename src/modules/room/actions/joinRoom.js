@@ -3,7 +3,7 @@ import { errors, throwError } from 'utils/error'
 import Room from 'modules/room/store'
 import events from 'modules/room/events'
 
-export default (io, socket, placeData) => {
+export default (socket, placeData, io) => {
     const { user, token } = socket.handshake.session
     const { placeId } = placeData
     socket.join(placeId)

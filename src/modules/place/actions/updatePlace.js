@@ -5,7 +5,7 @@ import { retrieve, update } from 'utils/datastore'
 import { PLACE_KIND } from 'modules/place/constants'
 import events from 'modules/place/events'
 
-export default (io, socket, data) => {
+export default (socket, data, io) => {
     const { token, user } = socket.handshake.session
     const { id, updatedData } = data
     retrieve(PLACE_KIND, id)
