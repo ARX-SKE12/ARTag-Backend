@@ -11,7 +11,10 @@ export function create(kind, data) {
 
 export function update(kind, id, data) {
     const key = datastore.key([ kind, datastore.int(id) ])
-    const entity = { key, data }
+    const updateData = retrieve(id)
+    for (const props in data)
+        updateData[props] = data[props]
+    const entity = { key, updateData }
     return datastore.save(entity)
 }
 
