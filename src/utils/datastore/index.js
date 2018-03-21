@@ -1,5 +1,6 @@
 import Datastore from '@google-cloud/datastore'
 import PROJECT_ID from 'utils/datastore/constants'
+import to from 'await-to-js'
 
 const datastore = Datastore({ projectId: PROJECT_ID })
 
@@ -9,12 +10,13 @@ export function create(kind, data) {
     return datastore.save(entity)
 }
 
-export function update(kind, id, data) {
+export async function update(kind, id, data) {
     const key = datastore.key([ kind, datastore.int(id) ])
-    const updateData = retrieve(id)
+    const [ err, updateData ] = await to(retrieve(kind, id))
+    if (err) throw err
     for (const props in data)
-        updateData[props] = data[props]
-    const entity = { key, updateData }
+        updateData[0][props] = data[props]
+    const entity = { key, data: updateData[0] }
     return datastore.save(entity)
 }
 

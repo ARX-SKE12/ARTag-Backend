@@ -1,23 +1,25 @@
 import { getMe, getUser } from 'utils/facebook'
 
-export function resolveUserObject(accessToken, data) {
-    return getUser(accessToken, data.user).then(user => {
-        if (user.error) return user.error
-        else {
-            data.user = user
-            return data
-        }
-    }).catch(err => err)
+import to from 'await-to-js'
+
+export async function resolveUserObject(accessToken, data) {
+    const [ err, user ] = await to(getUser(accessToken, data.user))
+    if (err) return null
+    else {
+        if (user.error) return null
+        data.user = user
+        return data
+    }
 }
 
-export function resolveSelfObject(accessToken, data) {
-    return getMe(accessToken).then(user => {
-        if (user.error) return user.error
-        else {
-            data.user = user.id
-            return data
-        }
-    }).catch(err => err)
+export async function resolveSelfObject(accessToken, data) {
+    const [ err, user ] = await to(getMe(accessToken))
+    if (err) return null
+    else {
+        if (user.error) return null
+        data.user = user.id
+        return data
+    }
 }
 
 export function resolveUserListObject(accessToken, data) {
