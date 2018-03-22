@@ -7,6 +7,7 @@ const datastore = Datastore({ projectId: PROJECT_ID })
 export function create(kind, data) {
     const key = datastore.key([ kind ])
     const entity = { key, data }
+    console.log(entity)
     return datastore.save(entity)
 }
 

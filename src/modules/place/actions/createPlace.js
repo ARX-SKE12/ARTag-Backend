@@ -1,9 +1,9 @@
 import { errors, throwError } from 'utils/error'
-import { resolveSelfObject, resolveUserObject } from 'utils/user'
 
 import { PLACE_KIND } from 'modules/place/constants'
 import { create } from 'utils/datastore'
 import events from 'modules/place/events'
+import { resolveSelfObject } from 'utils/user'
 import to from 'await-to-js'
 
 function initializePlaceObject(placeObject) {

@@ -7,5 +7,6 @@ export default {
     TAG_REMOVE: 'tag-remove',
     TAG_REMOVE_SUCCESS: 'tag-remove-success',
     TAG_UPDATE: 'tag-update',
-    TAG_ERROR: 'tag-error'
+    TAG_ERROR: 'tag-error',
+    TAG_ARRIVE: 'tag-arrive'
 }
