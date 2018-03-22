@@ -15,14 +15,14 @@ export async function update(kind, id, data) {
     const [ err, updateData ] = await to(retrieve(kind, id))
     if (err) throw err
     for (const props in data)
-        updateData[0][props] = data[props]
-    const entity = { key, data: updateData[0] }
+        updateData[props] = data[props]
+    const entity = { key, data: updateData }
     return datastore.save(entity)
 }
 
 export function retrieve(kind, id) {
     const key = datastore.key([ kind, datastore.int(id) ])
-    return datastore.get(key)
+    return datastore.get(key).then(data => data[0]).catch(e => e)
 }
 
 export function list(kind) {
