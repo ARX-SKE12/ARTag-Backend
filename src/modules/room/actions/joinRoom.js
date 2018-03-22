@@ -9,7 +9,7 @@ export default async function(socket, placeData, io) {
     const { placeId } = placeData
     socket.join(placeId)
     socket.handshake.session.currentRoom = placeId
-    const [ joinErr, joinRoomSuccess ] = await to(Room.joinRoom(placeId, user))
+    const [ joinErr ] = await to(Room.joinRoom(placeId, user))
     if (joinErr) throwError(socket, events.ROOM_ERROR, errors.UNAUTHORIZED)
     else {
         const [ getErr, room ] = await to(Room.getPeople(token, placeId))

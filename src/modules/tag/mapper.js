@@ -1,7 +1,7 @@
 import createTag from 'modules/tag/actions/createTag'
-import editTag from 'modules/tag/actions/editTag'
 import events from 'modules/tag/events'
-import removeTag from 'modules/tag/actions/removeTag'
+import listTag from 'modules/tag/actions/listTag'
+import updateTag from 'modules/tag/actions/updateTag'
 
 export default [
     {
@@ -9,11 +9,11 @@ export default [
         action: createTag
     },
     {
-        event: events.TAG_EDIT,
-        action: editTag
+        event: events.TAG_UPDATE,
+        action: updateTag
     },
     {
-        event: events.TAG_REMOVE,
-        action: removeTag
+        event: events.TAG_LIST_REQUEST,
+        action: listTag
     }
 ]
