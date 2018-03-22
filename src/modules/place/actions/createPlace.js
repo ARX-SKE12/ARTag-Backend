@@ -20,7 +20,7 @@ export default async function createPlace(socket, placeData, io) {
         const [ resolveErr, placeWithUser ] = await to(resolveSelfObject(token, placeData))
         if (resolveErr) throwError(socket, events.PLACE_CREATE_ERROR, errors.UNAUTHORIZED)
         else {
-            const [ createErr, result ] = await to(create(PLACE_KIND, initializePlaceObject(placeWithUser)))
+            const [ createErr ] = await to(create(PLACE_KIND, initializePlaceObject(placeWithUser)))
             if (createErr) throwError(socket, events.PLACE_CREATE_ERROR, errors.INTERNAL_ERROR)
             else {
                 socket.emit(events.PLACE_CREATE_SUCCESS)
