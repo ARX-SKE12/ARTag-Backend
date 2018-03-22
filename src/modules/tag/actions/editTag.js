@@ -1,4 +1,4 @@
 
-export default (socket, tagData, io) => {
+export default async function editTag(socket, tagData, io) {
     
 }

@@ -23,7 +23,7 @@ export default async function(socket, tagData, io) {
                         if (createErr) throwError(socket, events.TAG_ERROR, errors.INTERNAL_ERROR)
                         else {
                             socket.emit(events.TAG_CREATE_SUCCESS)
-                            io.to(placeId).emit(events.TAG_ARRIVE)
+                            io.to(currentRoom).emit(events.TAG_ARRIVE)
                         }
                     }
                 }
