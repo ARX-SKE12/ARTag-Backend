@@ -46,13 +46,13 @@ jobs:
 
       - run: echo $GCLOUD_SERVICE_KEY | base64 --decode --ignore-garbage > ~/repo/key.config.json
 
-      - run: apt-get update --yes && apt-get --only-upgrade install kubectl google-cloud-sdk google-cloud-sdk-app-engine-grpc google-cloud-sdk-pubsub-emulator google-cloud-sdk-app-engine-go google-cloud-sdk-datastore-emulator google-cloud-sdk-app-engine-python google-cloud-sdk-cbt google-cloud-sdk-bigtable-emulator google-cloud-sdk-app-engine-python-extras google-cloud-sdk-datalab google-cloud-sdk-app-engine-java --yes
+      - run: apt-get install -y sudo
 
-      - run: gcloud --quiet components update
+      - run: sudo /opt/google-cloud-sdk/bin/gcloud --quiet components update
 
-      - run: gcloud auth activate-service-account --key-file $GOOGLE_APPLICATION_CREDENTIALS
+      - run: sudo /opt/google-cloud-sdk/bin/gcloud auth activate-service-account --key-file $GOOGLE_APPLICATION_CREDENTIALS
 
-      - run: gcloud config set project $GCLOUD_PROJECT
+      - run: sudo /opt/google-cloud-sdk/bin/gcloud config set project $GCLOUD_PROJECT
 
 
 workflows:
