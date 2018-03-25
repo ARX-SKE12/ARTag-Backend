@@ -47,7 +47,7 @@ jobs:
 
       - run: echo $GCLOUD_SERVICE_KEY | base64 --decode --ignore-garbage > ~/repo/key.config.json
 
-      - run: gcloud init
+      - run: gcloud components install *
 
       - run: gcloud --quiet components update
 
