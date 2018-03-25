@@ -47,6 +47,8 @@ jobs:
 
       - run: echo $GCLOUD_SERVICE_KEY | base64 --decode --ignore-garbage > ~/repo/key.config.json
 
+      - run: gcloud init
+
       - run: gcloud --quiet components update
 
       - run: gcloud auth activate-service-account --key-file $GOOGLE_APPLICATION_CREDENTIALS
