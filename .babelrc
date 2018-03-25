@@ -4,11 +4,17 @@
     ],
     "plugins": [
         ["module-resolver", {
-          "root": ["./src"],
-          "alias": {
-            "test": "./test",
-            "underscore": "lodash"
-          }
+            "root": ["./src"],
+            "alias": {
+                "test": "./test",
+                "underscore": "lodash"
+            }
+        }],
+        ["transform-runtime", {
+            "helpers": false,
+            "polyfill": false,
+            "regenerator": true,
+            "moduleName": "babel-runtime"
         }]
     ]
 }
