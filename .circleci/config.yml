@@ -45,9 +45,9 @@ jobs:
       - checkout
 
       - run: echo $GCLOUD_SERVICE_KEY | base64 --decode --ignore-garbage > ~/repo/key.config.json
-      
-      - run: ls
 
+      - run: sudo apt-get update && sudo apt-get --only-upgrade install kubectl google-cloud-sdk
+      
       - run: gcloud --quiet components update
 
       - run: gcloud auth activate-service-account --key-file $GOOGLE_APPLICATION_CREDENTIALS
@@ -69,3 +69,5 @@ workflows:
             - build
 
       - deploy-gc
+          requires:
+            - build
