@@ -1,8 +1,9 @@
+import { KEYFILE, PROJECT_ID } from 'utils/datastore/constants'
+
 import Datastore from '@google-cloud/datastore'
-import PROJECT_ID from 'utils/datastore/constants'
 import to from 'await-to-js'
 
-const datastore = Datastore({ projectId: PROJECT_ID })
+const datastore = Datastore({ projectId: PROJECT_ID, keyFilename: KEYFILE })
 
 function resolveDatastoreObjectId(datum) {
     datum.id = datum[datastore.KEY].id
