@@ -38,7 +38,7 @@ jobs:
   deploy-gc:
     
     docker:
-      - image: google/cloud-sdk
+      - image: google/cloud-sdk:latest
     
     working_directory: ~/repo
 
@@ -46,8 +46,6 @@ jobs:
       - checkout
 
       - run: echo $GCLOUD_SERVICE_KEY | base64 --decode --ignore-garbage > ~/repo/key.config.json
-
-      - run: gcloud
 
       - run: gcloud --quiet components update
 
