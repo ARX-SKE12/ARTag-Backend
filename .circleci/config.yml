@@ -36,7 +36,6 @@ jobs:
       - run: docker push $DOCKER_USER/$DOCKER_IMAGE_NAME
 
   deploy-gc:
-    machine: true
     
     docker:
       - image: google/cloud-sdk
@@ -48,13 +47,11 @@ jobs:
 
       - run: echo $GCLOUD_SERVICE_KEY | base64 --decode --ignore-garbage > ~/repo/key.config.json
 
-      - run: apt-get install -y sudo
+      - run: gcloud --quiet components update
 
-      - run: sudo /opt/google-cloud-sdk/bin/gcloud --quiet components update
+      - run: gcloud auth activate-service-account --key-file $GOOGLE_APPLICATION_CREDENTIALS
 
-      - run: sudo /opt/google-cloud-sdk/bin/gcloud auth activate-service-account --key-file $GOOGLE_APPLICATION_CREDENTIALS
-
-      - run: sudo /opt/google-cloud-sdk/bin/gcloud config set project $GCLOUD_PROJECT
+      - run: gcloud config set project $GCLOUD_PROJECT
 
 
 workflows:
