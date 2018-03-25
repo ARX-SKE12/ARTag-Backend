@@ -57,6 +57,9 @@ jobs:
 
       - run: gcloud config set project $GCLOUD_PROJECT
 
+      - run: docker build -t asia.gcr.io/${GCLOUD_PROJECT}/$DOCKER_IMAGE_NAME .
+
+      - run: gcloud docker -- push asia.gcr.io/${GCLOUD_PROJECT}/$DOCKER_IMAGE_NAME
 
 workflows:
   version: 2
