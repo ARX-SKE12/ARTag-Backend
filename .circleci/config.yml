@@ -49,13 +49,11 @@ jobs:
 
       - run: echo $GCLOUD_SERVICE_KEY | base64 --decode --ignore-garbage > ${HOME}/key.config.json
 
-      - run: ls
-
       - run: sed -i -e 's/true/false/' /usr/lib/google-cloud-sdk/lib/googlecloudsdk/core/config.json
 
       - run: gcloud --quiet components update
 
-      - run: gcloud auth activate-service-account --key-file $GOOGLE_APPLICATION_CREDENTIALS
+      - run: gcloud auth activate-service-account --key-file=${HOME}/key.config.json
 
       - run: gcloud config set project $GCLOUD_PROJECT
 
