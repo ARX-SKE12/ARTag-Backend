@@ -73,6 +73,24 @@ jobs:
       
       - run: gcloud docker -- push asia.gcr.io/${GCLOUD_PROJECT}/$DOCKER_IMAGE_NAME
 
+      - run: gsutil cp gs://artag-secure-file/artag-server.yml ./artag-server.yml
+
+      - run: gsutil cp gs://artag-secure-file/load-balancer-service.yml ./load-balancer-service.yml
+
+      - run: gsutil cp gs://artag-secure-file/redis-service.yml ./redis-service.yml
+
+      - run: gsutil cp gs://artag-secure-file/redis.yml ./redis.yml
+
+      - run: gcloud container clusters get-credentials artag-backend
+
+      - run: kubectl apply -f redis.yml
+
+      - run: kubectl apply -f redis-service.yml
+      
+      - run: kubectl apply -f artag-server.yml
+      
+      - run: kubectl apply -f load-balancer-service.yml
+      
 workflows:
   version: 2
   build_and_deploy:
