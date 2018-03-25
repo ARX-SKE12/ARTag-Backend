@@ -46,11 +46,13 @@ jobs:
 
       - run: echo $GCLOUD_SERVICE_KEY | base64 --decode --ignore-garbage > ~/repo/key.config.json
       
-      - run: sudo /opt/google-cloud-sdk/bin/gcloud --quiet components update
+      - run: ls
 
-      - run: sudo /opt/google-cloud-sdk/bin/gcloud auth activate-service-account --key-file $GOOGLE_APPLICATION_CREDENTIALS
+      - run: gcloud --quiet components update
 
-      - run: sudo /opt/google-cloud-sdk/bin/gcloud config set project $GCLOUD_PROJECT
+      - run: gcloud auth activate-service-account --key-file $GOOGLE_APPLICATION_CREDENTIALS
+
+      - run: gcloud config set project $GCLOUD_PROJECT
 
 
 workflows:
@@ -65,5 +67,5 @@ workflows:
               only: master
           requires:
             - build
-            
+
       - deploy-gc
