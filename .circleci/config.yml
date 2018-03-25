@@ -40,8 +40,6 @@ jobs:
     docker:
       - image: google/cloud-sdk:latest
     
-    working_directory: ~/repo
-
     steps:
       - checkout
 
