@@ -36,6 +36,8 @@ jobs:
       - run: docker push $DOCKER_USER/$DOCKER_IMAGE_NAME
 
   deploy-gc:
+    machine: true
+    
     docker:
       - image: google/cloud-sdk
     
