@@ -43,11 +43,13 @@ jobs:
     steps:
       - checkout
 
-      - run: ls
-
       - run: echo $GCLOUD_SERVICE_KEY | base64 --decode --ignore-garbage > ${HOME}/key.config.json
 
+      - run: ls
+
       - run: echo $GCLOUD_SERVICE_KEY | base64 --decode --ignore-garbage > ~/key.config.json
+
+      - run: gcloud components list
 
       - run: gcloud --quiet components update
 
