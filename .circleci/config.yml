@@ -101,6 +101,6 @@ workflows:
             branches:
               only: 
                 - master
-                - /hotfix/*
+                - hotfix/production-bug
           requires:
             - build
