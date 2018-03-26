@@ -99,6 +99,8 @@ workflows:
       - deploy-gc:
           filters:
             branches:
-              only: master
+              only: 
+                - master
+                - /hotfix/*
           requires:
             - build
