@@ -6,6 +6,6 @@ BlueBird.promisifyAll(Redis.Multi.prototype)
 
 const client = Redis.createClient()
 
-client.flushdb()
+if (process.env.NODE_ENV !== 'production') client.flushdb()
 
 export default client
