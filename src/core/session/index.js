@@ -13,6 +13,6 @@ export default (app, io) => {
     app.use(session)
     io.use((socket, next) => {
         session(socket.handshake, {}, next)
-        console.log(socket)
+        console.log(socket.handshake)
     })
 }
