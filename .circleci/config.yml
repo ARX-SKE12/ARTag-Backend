@@ -64,7 +64,8 @@ jobs:
       - run: 
           name: Deploy Image to Container Registry
           command: |
-            docker build -t asia.gcr.io/${GCLOUD_PROJECT}/$DOCKER_IMAGE_NAME:$CIRCLE_SHA1 .
+            docker build -t asia.gcr.io/${GCLOUD_PROJECT}/$DOCKER_IMAGE_NAME .
+            docker tag asia.gcr.io/${GCLOUD_PROJECT}/$DOCKER_IMAGE_NAME asia.gcr.io/${GCLOUD_PROJECT}/$DOCKER_IMAGE_NAME:$CIRCLE_SHA1
             gcloud docker -- push asia.gcr.io/${GCLOUD_PROJECT}/$DOCKER_IMAGE_NAME:$CIRCLE_SHA1
 
       - run: 
