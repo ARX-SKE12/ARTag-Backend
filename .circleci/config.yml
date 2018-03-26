@@ -85,6 +85,7 @@ jobs:
       - run:
           name: Deploy to Kubernetes
           command: |
+            sed -ie "s/THIS_STRING_IS_REPLACED_DURING_BUILD/$(date)/g" $SERVER_CONFIG_FILE
             kubectl apply -f $REDIS_CONFIG_FILE
             kubectl apply -f $REDIS_SERVICE_CONFIG_FILE
             kubectl apply -f $SERVER_CONFIG_FILE
