@@ -65,7 +65,8 @@ jobs:
           name: Deploy Image to Container Registry
           command: |
             docker build -t asia.gcr.io/${GCLOUD_PROJECT}/$DOCKER_IMAGE_NAME .
-            gcloud docker -- push asia.gcr.io/${GCLOUD_PROJECT}/$DOCKER_IMAGE_NAME
+            docker tag asia.gcr.io/${GCLOUD_PROJECT}/$DOCKER_IMAGE_NAME asia.gcr.io/${GCLOUD_PROJECT}/$DOCKER_IMAGE_NAME:$CIRCLE_SHA1
+            gcloud docker -- push asia.gcr.io/${GCLOUD_PROJECT}/$DOCKER_IMAGE_NAME:$CIRCLE_SHA1
 
       - run: 
           name: Load Kubernetes Config Files
@@ -85,10 +86,12 @@ jobs:
       - run:
           name: Deploy to Kubernetes
           command: |
+            sed -ie "s/THIS_STRING_IS_REPLACED_DURING_BUILD/$(date)/g" $SERVER_CONFIG_FILE
             kubectl apply -f $REDIS_CONFIG_FILE
             kubectl apply -f $REDIS_SERVICE_CONFIG_FILE
             kubectl apply -f $SERVER_CONFIG_FILE
             kubectl apply -f $LOAD_BALANCER_CONFIG_FILE
+            kubectl set image deployment/artag-server artag-server=asia.gcr.io/${GCLOUD_PROJECT}/$DOCKER_IMAGE_NAME:$CIRCLE_SHA1
 
 workflows:
   version: 2
@@ -99,6 +102,8 @@ workflows:
       - deploy-gc:
           filters:
             branches:
-              only: master
+              only: 
+                - master
+                - hotfix/production-bug
           requires:
             - build
