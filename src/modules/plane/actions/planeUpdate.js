@@ -5,7 +5,7 @@ import { PLACE_KIND } from 'modules/plane/constants'
 import to from 'await-to-js'
 
 export async function planeUpdate(socket, planeData, io) {
-    const { user } = socket.handshake.session
+    const { user } = socket.request.session
     const { id, data } = planeData
     const [ retrieveErr, place ] = await to(retrieve(PLACE_KIND, id))
     if (retrieveErr) throwError(socket, events.PLANE_ERROR, errors.INTERNAL_ERROR)

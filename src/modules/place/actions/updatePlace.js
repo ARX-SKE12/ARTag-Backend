@@ -7,7 +7,7 @@ import events from 'modules/place/events'
 import to from 'await-to-js'
 
 export default async function(socket, data, io) {
-    const { token, user } = socket.handshake.session
+    const { token, user } = socket.request.session
     const { id, updatedData } = data
     const [ retrieveErr, place ] = await to(retrieve(PLACE_KIND, id))
     if (retrieveErr) throwError(socket, events.PLACE_UPDATE_ERROR, errors.INTERNAL_ERROR)

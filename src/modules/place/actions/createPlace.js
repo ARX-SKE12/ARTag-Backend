@@ -15,7 +15,7 @@ function initializePlaceObject(placeObject) {
 }
 
 export default async function createPlace(socket, placeData, io) {
-    const { token } = socket.handshake.session
+    const { token } = socket.request.session
     if (token) {
         const [ resolveErr, placeWithUser ] = await to(resolveSelfObject(token, placeData))
         if (resolveErr) throwError(socket, events.PLACE_CREATE_ERROR, errors.UNAUTHORIZED)
