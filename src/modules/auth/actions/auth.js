@@ -7,7 +7,7 @@ import to from 'await-to-js'
 function emitSuccess(socket, userData, token) {
     socket.handshake.session.token = token
     socket.handshake.session.user = userData.id
-    socket.emit(events.AUTH_SUCCESS, JSON.stringify(userData))
+    socket.emit(events.AUTH_SUCCESS, userData)
 }
 
 function emitError(socket, error) {

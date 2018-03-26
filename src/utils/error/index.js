@@ -7,5 +7,5 @@ export const errors = {
 }
 
 export function throwError (socket, event, error) {
-    socket.emit(event, JSON.stringify({ error }))
+    socket.emit(event, { error })
 } 

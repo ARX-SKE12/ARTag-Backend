@@ -6,8 +6,7 @@ import store from 'core/session/store'
 const session = ExpressSession({
     secret: SESSION_SECRET_KEY,
     resave: true,
-    saveUninitialized: true,
-    store
+    saveUninitialized: true
 })
 
 export default (app, io) => {
