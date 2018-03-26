@@ -21,20 +21,6 @@ jobs:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
 
-  # deploy-docker:
-  #   machine: true
-
-  #   working_directory: ~/repo
-
-  #   steps:
-  #     - checkout
-
-  #     - run: docker login -u $DOCKER_USER -p $DOCKER_PASS
-
-  #     - run: docker build -t $DOCKER_USER/$DOCKER_IMAGE_NAME .
-
-  #     - run: docker push $DOCKER_USER/$DOCKER_IMAGE_NAME
-
   deploy-gc:
     
     docker:
@@ -45,15 +31,15 @@ jobs:
     steps:
       - checkout
 
-      - run: echo $GCLOUD_SERVICE_KEY | base64 --decode --ignore-garbage > ~/repo/key.config.json
+      - run: echo $GCLOUD_SERVICE_KEY | base64 --decode --ignore-garbage > ~/repo/$KEY_FILE
 
-      - run: echo $GCLOUD_SERVICE_KEY | base64 --decode --ignore-garbage > ${HOME}/key.config.json
+      - run: echo $GCLOUD_SERVICE_KEY | base64 --decode --ignore-garbage > ${HOME}/$KEY_FILE
 
       - run: sed -i -e 's/true/false/' /usr/lib/google-cloud-sdk/lib/googlecloudsdk/core/config.json
 
       - run: gcloud --quiet components update
 
-      - run: gcloud auth activate-service-account --key-file=${HOME}/key.config.json
+      - run: gcloud auth activate-service-account --key-file=${HOME}/$KEY_FILE
 
       - run: gcloud config set project $GCLOUD_PROJECT
       
@@ -73,27 +59,27 @@ jobs:
       
       - run: gcloud docker -- push asia.gcr.io/${GCLOUD_PROJECT}/$DOCKER_IMAGE_NAME
 
-      - run: gsutil cp gs://artag-secure-file/artag-server.yml ./artag-server.yml
+      - run: gsutil cp gs://$SECURE_BUCKET/$SERVER_CONFIG_FILE ./$SERVER_CONFIG_FILE
 
-      - run: gsutil cp gs://artag-secure-file/load-balancer-service.yml ./load-balancer-service.yml
+      - run: gsutil cp gs://$SECURE_BUCKET/$LOAD_BALANCER_CONFIG_FILE ./$LOAD_BALANCER_CONFIG_FILE
 
-      - run: gsutil cp gs://artag-secure-file/redis-service.yml ./redis-service.yml
+      - run: gsutil cp gs://$SECURE_BUCKET/$REDIS_SERVICE_CONFIG_FILE ./$REDIS_SERVICE_CONFIG_FILE
 
-      - run: gsutil cp gs://artag-secure-file/redis.yml ./redis.yml
+      - run: gsutil cp gs://$SECURE_BUCKET/$REDIS_CONFIG_FILE ./$REDIS_CONFIG_FILE
 
-      - run: gcloud config set compute/zone asia-south1-a
+      - run: gcloud config set compute/zone $COMPUTE_ZONE
 
-      - run: gcloud container clusters get-credentials artag-backend
+      - run: gcloud container clusters get-credentials $CLUSTER_NAME
 
       - run: gcloud components install kubectl
 
-      - run: kubectl apply -f redis.yml
+      - run: kubectl apply -f $REDIS_CONFIG_FILE
 
-      - run: kubectl apply -f redis-service.yml
+      - run: kubectl apply -f $REDIS_SERVICE_CONFIG_FILE
       
-      - run: kubectl apply -f artag-server.yml
+      - run: kubectl apply -f $SERVER_CONFIG_FILE
       
-      - run: kubectl apply -f load-balancer-service.yml
+      - run: kubectl apply -f $LOAD_BALANCER_CONFIG_FILE
 
 workflows:
   version: 2
@@ -101,13 +87,9 @@ workflows:
     jobs:
       - build
 
-      # - deploy-docker:
-      #     filters:
-      #       branches:
-      #         only: master
-      #     requires:
-      #       - build
-
       - deploy-gc:
+          # filters:
+          #   branches:
+          #     only: master
           requires:
             - build
