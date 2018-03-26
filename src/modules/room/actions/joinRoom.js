@@ -5,10 +5,10 @@ import events from 'modules/room/events'
 import to from 'await-to-js'
 
 export default async function(socket, placeData, io) {
-    const { user, token } = socket.request.session
+    const { user, token } = socket.handshake.session
     const { placeId } = placeData
     socket.join(placeId)
-    socket.request.session.currentRoom = placeId
+    socket.handshake.session.currentRoom = placeId
     const [ joinErr ] = await to(Room.joinRoom(placeId, user))
     if (joinErr) throwError(socket, events.ROOM_ERROR, errors.UNAUTHORIZED)
     else {

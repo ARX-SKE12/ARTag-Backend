@@ -6,7 +6,7 @@ import { getMe } from 'utils/facebook'
 import to from 'await-to-js'
 
 export default async function leaveRoom(socket, data, io) {
-    const { user, token, currentRoom } = socket.request.session
+    const { user, token, currentRoom } = socket.handshake.session
     socket.leave(currentRoom)
     const [ leaveErr ] = await to(Room.leaveRoom(currentRoom, user))
     if (leaveErr) throwError(socket, events.ROOM_ERROR, errors.UNAUTHORIZED)
@@ -25,5 +25,5 @@ export default async function leaveRoom(socket, data, io) {
             }
         }
     }
-    delete socket.request.session.currentRoom
+    delete socket.handshake.session.currentRoom
 }

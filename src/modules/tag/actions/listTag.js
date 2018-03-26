@@ -9,7 +9,7 @@ import to from 'await-to-js'
 const PLACE_ID = 'placeId'
 
 export default async function listTag(socket) {
-    const { token, user, currentRoom } = socket.request.session
+    const { token, user, currentRoom } = socket.handshake.session
     if (currentRoom) {
         const [ listErr, tagList ] = await to(queryFilter(TAG_KIND, [{
             field: PLACE_ID,

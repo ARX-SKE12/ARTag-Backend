@@ -1,5 +1,6 @@
 import ExpressSession from 'express-session'
 import { SESSION_SECRET_KEY } from 'core/session/constants'
+import SharedSession from 'express-socket.io-session'
 import store from 'core/session/store'
 
 const session = ExpressSession({
@@ -11,5 +12,7 @@ const session = ExpressSession({
 
 export default (app, io) => {
     app.use(session)
-    io.use((socket, next) => { session(socket.request, {}, next) })
+    io.use(SharedSession(session, {
+        autoSave: true
+    }))
 }

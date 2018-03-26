@@ -7,7 +7,7 @@ import { resolveSelfObject } from 'utils/user'
 import to from 'await-to-js'
 
 export default async function(socket, tagData, io) {
-    const { token, user, currentRoom } = socket.request.session
+    const { token, user, currentRoom } = socket.handshake.session
     if (currentRoom) {
         const [ placeErr, place ] = await to(retrieve(PLACE_KIND, currentRoom))
         if (token) {

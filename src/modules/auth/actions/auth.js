@@ -5,8 +5,8 @@ import { getMe } from 'utils/facebook'
 import to from 'await-to-js'
 
 function emitSuccess(socket, userData, token) {
-    socket.request.session.token = token
-    socket.request.session.user = userData.id
+    socket.handshake.session.token = token
+    socket.handshake.session.user = userData.id
     socket.emit(events.AUTH_SUCCESS, userData)
 }
 

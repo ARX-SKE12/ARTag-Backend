@@ -7,7 +7,7 @@ import { resolveUserListObject } from 'utils/user'
 import to from 'await-to-js'
 
 export default async function listPlace(socket) {
-    const { token } = socket.request.session
+    const { token } = socket.handshake.session
     const [ placeErr, placeList ] = await to(list(PLACE_KIND))
     if (placeErr) throwError(socket, events.PLACE_LIST_ERROR, errors.INTERNAL_ERROR)
     else {

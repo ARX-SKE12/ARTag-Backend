@@ -6,7 +6,7 @@ import events from 'modules/tag/events'
 import to from 'await-to-js'
 
 export default async function updateTag(socket, tagData, io) {
-    const { token, user, currentRoom } = socket.request.session
+    const { token, user, currentRoom } = socket.handshake.session
     const { id, updatedData } = tagData 
     if (token) {
         if (currentRoom) {
