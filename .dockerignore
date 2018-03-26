@@ -1,7 +1,6 @@
 .git
 .circleci
 .env
-*.config.json
 README.md
 .gitignore
 node_modules
