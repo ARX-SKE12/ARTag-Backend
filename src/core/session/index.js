@@ -11,5 +11,8 @@ const session = ExpressSession({
 
 export default (app, io) => {
     app.use(session)
-    io.use((socket, next) => session(socket.handshake, {}, next))
+    io.use((socket, next) => {
+        session(socket.handshake, {}, next)
+        console.log(socket)
+    })
 }
