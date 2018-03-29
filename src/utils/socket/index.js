@@ -1,7 +1,9 @@
 
 export function eventJSONHandler(socket, event, exec) {
     socket.on(event, data => {
-        if (typeof data !== 'object') data = JSON.parse(data)
+        try {
+            data = JSON.parse(data)
+        } catch(e) {}
         exec(data)
     })
 }
