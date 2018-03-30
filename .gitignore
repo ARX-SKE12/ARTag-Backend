@@ -63,3 +63,6 @@ build
 
 # Config file
 *.config.json
+
+# Just Test Script
+*.dontcommit.*
