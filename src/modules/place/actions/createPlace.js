@@ -1,4 +1,5 @@
 import { PLACE_KIND, THUMBNAIL_BUCKET } from 'modules/place/constants'
+import { canTrack, createTarget, similar } from 'utils/cloud-recognition'
 import { errors, throwError } from 'utils/error'
 
 import { compressImage } from 'utils/image'
@@ -9,22 +10,36 @@ import to from 'await-to-js'
 import { upload } from 'utils/storage'
 
 async function initializePlaceObject(placeObject) {
-    // placeObject.is_active = true
-    // placeObject.timestamp = Date.now()
-    // placeObject.meshes = []
-    // placeObject.tags = []
-    // return placeObject
-    const [ compressErr, thumbnail ] = await to(compressImage(placeObject.thumbnail, 450, 800))
-    if (compressErr) throw 'Image Compression Error'
-    else {
-        const time = Date.now()
-        const imageName = `${time}-${placeObject.name}.png`
-        const [ uploadErr ] = await to(upload(THUMBNAIL_BUCKET, imageName, thumbnail))
-        if (uploadErr) throw 'Upload Error'
-        else {
-            
-        }
+    const [ compressThumbnailErr, thumbnail ] = await to(compressImage(placeObject.thumbnail, 800))
+    if (compressThumbnailErr) throw 'Image Compression Error'
+    const time = Date.now()
+    const imageName = `${time}-${placeObject.name}.png`
+    const [ uploadThumbnailErr ] = await to(upload(THUMBNAIL_BUCKET, imageName, thumbnail))
+    if (uploadThumbnailErr) throw 'Upload Error'
+    const [ compressMarkerErr, marker ] = await to(compressImage(placeObject.marker, 500))
+    if (compressMarkerErr) throw 'Image Compression Error'
+    const [ similarErr, isSimilar ] = await to(similar(marker))
+    if (similarErr) throw 'Similar Error'
+    if (isSimilar) throw 'Marker Already Exist'
+    const [ canTrackErr, shouldTrack ] = await to(canTrack(marker))
+    if (canTrackErr) throw 'Quality Check Error'
+    if (!shouldTrack) throw 'Too Low Quality'
+    const [ createTargetErr, targetId ] = await to(createTarget(imageName, marker, placeObject.marker.size))
+    if (createTargetErr) throw 'Create Target Failure'
+    console.log(targetId)
+    const { name, description,isPublic } = placeObject
+    const placeData = {
+        name,
+        description,
+        isPublic,
+        thumbnail: imageName,
+        marker: targetId,
+        timestamp: time,
+        isActive: true,
+        planes: [],
+        users: []
     }
+    return placeData
 }
 
 export default async function createPlace(socket, placeData, io) {
