@@ -55,10 +55,10 @@ export default async function createPlace(socket, placeData, io) {
             const placeObject = await initializePlaceObject(placeWithUser)
             if (!placeObject) throwError(socket, events.PLACE_CREATE_ERROR, errors.INTERNAL_ERROR)
             else {
-                const [ createErr ] = await to(create(PLACE_KIND, placeObject))
+                const [ createErr, placeId ] = await to(create(PLACE_KIND, placeObject))
                 if (createErr) throwError(socket, events.PLACE_CREATE_ERROR, errors.INTERNAL_ERROR)
                 else {
-                    socket.emit(events.PLACE_CREATE_SUCCESS)
+                    socket.emit(events.PLACE_CREATE_SUCCESS, { placeId })
                     io.sockets.emit(events.PLACE_DATA_UPDATE)
                 }
             }
