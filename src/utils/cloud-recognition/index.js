@@ -3,8 +3,6 @@ import { WIKITUDE_COLLECTION_API_ROOT, WIKITUDE_TOKEN } from 'utils/cloud-recogn
 import Request from 'request-promise'
 
 export function createTarget(name, imageUrl, physicalHeight) {
-    console.log(WIKITUDE_COLLECTION_API_ROOT)
-    console.log(WIKITUDE_TOKEN)
     const data = { name, imageUrl, physicalHeight }
     return Request({
         method: 'POST',

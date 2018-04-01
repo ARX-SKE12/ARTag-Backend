@@ -25,8 +25,6 @@ async function initializePlaceObject(placeObject) {
     if (uploadMarkerErr) return null
     const markerLocation = `${BUCKET_ROOT}/${MARKER_BUCKET}/${imageName}`
     const [ createMarkerErr, markerTarget ] = await to(createTarget(imageName, markerLocation, marker.size))
-    console.log(createMarkerErr)
-    console.log('target'+markerTarget)
     if (createMarkerErr) return null
 
     const data = {
