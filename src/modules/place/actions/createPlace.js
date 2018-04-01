@@ -32,7 +32,7 @@ async function initializePlaceObject(placeObject) {
         isActive: true,
         planes: [],
         users: [],
-        marker: markerTarget.id
+        marker: markerTarget.name
     }
     return data
 }
