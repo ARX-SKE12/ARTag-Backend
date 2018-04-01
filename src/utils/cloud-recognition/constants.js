@@ -2,8 +2,8 @@ import DotEnv from 'dotenv'
 
 DotEnv.config()
 
-export const EASYAR_HOST = process.env.EASYAR_HOST
+const { WIKITUDE_API_HOST, ARTAG_WIKITUDE_COLLECTION } = process.env
 
-export const EASYAR_SECRET = process.env.EASYAR_SECRET
+export const { WIKITUDE_TOKEN } = process.env
 
-export const EASYAR_APP_KEY = process.env.EASYAR_APP_KEY
+export const WIKITUDE_COLLECTION_API_ROOT = `${WIKITUDE_API_HOST}/cloudrecognition/targetCollection/${ARTAG_WIKITUDE_COLLECTION}`
