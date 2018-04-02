@@ -25,8 +25,6 @@ async function initializePlaceObject(placeObject) {
     if (uploadMarkerErr) return null
     const markerLocation = `${BUCKET_ROOT}/${MARKER_BUCKET}/${imageName}`
     const [ createMarkerErr, markerTarget ] = await to(createTarget(imageName, markerLocation, marker.size))
-    console.log(createMarkerErr)
-    console.log('target'+markerTarget)
     if (createMarkerErr) return null
 
     const data = {
@@ -34,7 +32,7 @@ async function initializePlaceObject(placeObject) {
         isActive: true,
         planes: [],
         users: [],
-        marker: markerTarget.id
+        marker: markerTarget.name
     }
     return data
 }
@@ -48,10 +46,10 @@ export default async function createPlace(socket, placeData, io) {
             const placeObject = await initializePlaceObject(placeWithUser)
             if (!placeObject) throwError(socket, events.PLACE_CREATE_ERROR, errors.INTERNAL_ERROR)
             else {
-                const [ createErr, placeId ] = await to(create(PLACE_KIND, placeObject))
+                const [ createErr, place ] = await to(create(PLACE_KIND, placeObject))
                 if (createErr) throwError(socket, events.PLACE_CREATE_ERROR, errors.INTERNAL_ERROR)
                 else {
-                    socket.emit(events.PLACE_CREATE_SUCCESS, { placeId })
+                    socket.emit(events.PLACE_CREATE_SUCCESS, { place })
                     io.sockets.emit(events.PLACE_DATA_UPDATE)
                 }
             }

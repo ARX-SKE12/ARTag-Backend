@@ -22,7 +22,8 @@ function resolveDatastoreList(res) {
 export function create(kind, data) {
     const key = datastore.key([ kind ])
     const entity = { key, data }
-    return datastore.save(entity).then(() => key.id).catch(err => err)
+    data.id = key.id
+    return datastore.save(entity).then(() => data).catch(err => err)
 }
 
 export async function update(kind, id, data) {
