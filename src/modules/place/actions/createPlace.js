@@ -21,7 +21,7 @@ async function initializePlaceObject(placeObject) {
     const [ uploadThumbnailErr ] = await to(upload(THUMBNAIL_BUCKET, imageName, thumbnailImage))
     if (uploadThumbnailErr) return null
 
-    const qr = QR(significant, { size: 500 })
+    const qr = QR(base64.encode(significant), { size: 200 })
     const [ uploadQRErr ] = await to(upload(QR_BUCKET, imageName, qr))
     if (uploadQRErr) return null
     
