@@ -1,7 +1,7 @@
 import createPlace from 'modules/place/actions/createPlace'
 import events from 'modules/place/events'
 import listPlace from 'modules/place/actions/listPlace'
-import retrievePlacebyMarker from 'modules/place/actions/retrievePlacebyMarker'
+import retrievePlacebySignificant from 'modules/place/actions/retrievePlacebySignificant'
 import updatePlace from 'modules/place/actions/updatePlace'
 
 export default [
@@ -18,7 +18,7 @@ export default [
         action: updatePlace
     },
     {
-        event: events.PLACE_RETRIEVE_MARKER,
-        action: retrievePlacebyMarker
+        event: events.PLACE_RETRIEVE_SIGNIFICANT,
+        action: retrievePlacebySignificant
     }
 ]

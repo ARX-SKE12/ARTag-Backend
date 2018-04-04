@@ -10,7 +10,7 @@ export default {
     PLACE_UPDATE: 'place-update',
     PLACE_UPDATE_SUCCESS: 'place-update-success',
     PLACE_UPDATE_ERROR: 'place-update-error',
-    PLACE_RETRIEVE_MARKER: 'place-retrieve-marker',
-    PLACE_RESPONSE_MARKER: 'place-response-marker',
-    PLACE_ERROR_MARKER: 'place-error-marker'
+    PLACE_RETRIEVE_SIGNIFICANT: 'place-retrieve-significant',
+    PLACE_RESPONSE_SIGNIFICANT: 'place-response-significant',
+    PLACE_ERROR_SIGNIFICANT: 'place-error-significant'
 }
