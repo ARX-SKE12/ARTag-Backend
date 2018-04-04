@@ -1,7 +1,7 @@
 import { errors, throwError } from 'utils/error'
 
+import { Base64 } from 'js-base64'
 import { PLACE_KIND } from 'modules/place/constants'
-import base64 from 'base-64'
 import events from 'modules/place/events'
 import { queryFilter } from 'utils/datastore'
 import to from 'await-to-js'
@@ -11,7 +11,7 @@ const NAME_FIELD = 'name'
 
 export default async function  retrievePlacebySignificant(socket, data) {
     const { encodedSignificant } = data
-    const decodedData = base64.decode(encodedSignificant).split('-')
+    const decodedData = Base64.decode(encodedSignificant).split('-')
     const timestamp = decodedData[0]
     const name = decodedData[1]
     const { token, user } = socket.handshake.session
