@@ -8,7 +8,7 @@ const PromiseStorage = BlueBird.promisifyAll(Storage)
 const storage = PromiseStorage({ projectId: PROJECT_ID, keyFilename: KEYFILE })
 
 export function upload(bucketName, imageName, imageData) {
-    const imageBuffer = new Buffer(imageData, BASE64_TYPE)
+    const imageBuffer = new Buffer(imageData.replace(/^data:image\/\w+;base64,/, ''), BASE64_TYPE)
     const bucket = storage.bucket(bucketName)
     const file = bucket.file(imageName)
     return file.saveAsync(imageBuffer, {

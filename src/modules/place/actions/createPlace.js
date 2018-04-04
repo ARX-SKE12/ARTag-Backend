@@ -1,38 +1,35 @@
-import { BUCKET_ROOT, MARKER_BUCKET, PLACE_KIND, THUMBNAIL_BUCKET } from 'modules/place/constants'
+import { BUCKET_ROOT, PLACE_KIND, QR_BUCKET, THUMBNAIL_BUCKET } from 'modules/place/constants'
 import { errors, throwError } from 'utils/error'
 
+import QR from 'yaqrcode'
+import base64 from 'base-64'
 import { compressImage } from 'utils/image'
 import { create } from 'utils/datastore'
-import { createTarget } from 'utils/cloud-recognition'
 import events from 'modules/place/events'
 import { resolveSelfObject } from 'utils/user'
 import to from 'await-to-js'
 import { upload } from 'utils/storage'
 
 async function initializePlaceObject(placeObject) {
-    const { name, description, isPublic, marker, thumbnail, user } = placeObject
+    const { name, description, isPublic, thumbnail, user } = placeObject
     const timestamp = Date.now()
-    const imageName = `${timestamp}-${name}.png`
+    const significant = `${timestamp}-${name}`
+    const imageName = `${significant}.png`
     
     const [ compressThumbnailErr, thumbnailImage ] = await to(compressImage(thumbnail, 800))
     if (compressThumbnailErr) return null
     const [ uploadThumbnailErr ] = await to(upload(THUMBNAIL_BUCKET, imageName, thumbnailImage))
     if (uploadThumbnailErr) return null
-    
-    const [ compressMarkerErr, markerImage ] = await to(compressImage(marker, 500))
-    if (compressMarkerErr) return null
-    const [ uploadMarkerErr ] = await to(upload(MARKER_BUCKET, imageName, markerImage))
-    if (uploadMarkerErr) return null
-    const markerLocation = `${BUCKET_ROOT}/${MARKER_BUCKET}/${imageName}`
-    const [ createMarkerErr, markerTarget ] = await to(createTarget(imageName, markerLocation, marker.size))
-    if (createMarkerErr) return null
 
+    const qr = QR(significant, { size: 500 })
+    const [ uploadQRErr ] = await to(upload(QR_BUCKET, imageName, qr))
+    if (uploadQRErr) return null
+    
     const data = {
         name, description, isPublic, user, timestamp,
         isActive: true,
         planes: [],
-        users: [],
-        marker: markerTarget.name
+        users: []
     }
     return data
 }
