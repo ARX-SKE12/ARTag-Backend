@@ -1,8 +1,8 @@
 import { BUCKET_ROOT, PLACE_KIND, QR_BUCKET, THUMBNAIL_BUCKET } from 'modules/place/constants'
 import { errors, throwError } from 'utils/error'
 
-import QR from 'yaqrcode'
-import base64 from 'base-64'
+import { Base64 } from 'js-base64'
+import QR from 'qrcode'
 import { compressImage } from 'utils/image'
 import { create } from 'utils/datastore'
 import events from 'modules/place/events'
@@ -20,8 +20,9 @@ async function initializePlaceObject(placeObject) {
     if (compressThumbnailErr) return null
     const [ uploadThumbnailErr ] = await to(upload(THUMBNAIL_BUCKET, imageName, thumbnailImage))
     if (uploadThumbnailErr) return null
-
-    const qr = QR(base64.encode(significant), { size: 200 })
+    const encodedSignificant = Base64.encode(significant)
+    const [ qrErr, qr ] = await to(QR.toDataURL(encodedSignificant))
+    if (qrErr) return null
     const [ uploadQRErr ] = await to(upload(QR_BUCKET, imageName, qr))
     if (uploadQRErr) return null
     
