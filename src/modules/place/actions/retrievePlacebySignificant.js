@@ -12,7 +12,7 @@ const NAME_FIELD = 'name'
 export default async function  retrievePlacebySignificant(socket, data) {
     const { encodedSignificant } = data
     const decodedData = Base64.decode(encodedSignificant).split('-')
-    const timestamp = decodedData[0]
+    const timestamp = Number(decodedData[0])
     const name = decodedData[1]
     const { token, user } = socket.handshake.session
     const [ queryErr, place ] = await to(queryFilter(PLACE_KIND, [{
@@ -25,5 +25,5 @@ export default async function  retrievePlacebySignificant(socket, data) {
         value: name
     }]))
     if (queryErr) throwError(socket, events.PLACE_ERROR_SIGNIFICANT, errors.INTERNAL_ERROR)
-    else socket.emit(events.PLACE_RESPONSE_SIGNIFICANT, place)
+    else socket.emit(events.PLACE_RESPONSE_SIGNIFICANT, place[0])
 }
