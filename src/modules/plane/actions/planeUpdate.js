@@ -2,9 +2,10 @@ import { errors, throwError } from 'utils/error'
 import { retrieve, update } from 'utils/datastore'
 
 import { PLACE_KIND } from 'modules/plane/constants'
+import events from 'modules/plane/events'
 import to from 'await-to-js'
 
-export async function planeUpdate(socket, planeData, io) {
+export default async function planeUpdate(socket, planeData, io) {
     const { user } = socket.handshake.session
     const { id, data } = planeData
     const [ retrieveErr, place ] = await to(retrieve(PLACE_KIND, id))
