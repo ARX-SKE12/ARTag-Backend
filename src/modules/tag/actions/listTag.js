@@ -11,11 +11,12 @@ const PLACE_ID = 'placeId'
 export default async function listTag(socket) {
     const { token, user, currentRoom } = socket.handshake.session
     if (currentRoom) {
-        const [ listErr, tagList ] = await to(queryFilter(TAG_KIND, [{
+        const filters = [{
             field: PLACE_ID,
             op: '=',
             value: currentRoom
-        }]))
+        }]
+        const [ listErr, tagList ] = await to(queryFilter(TAG_KIND, { filters }))
         if (listErr) throwError(socket, events.TAG_ERROR, errors.INTERNAL_ERROR)
         else {
             if (token) {

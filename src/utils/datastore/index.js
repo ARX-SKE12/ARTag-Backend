@@ -14,9 +14,12 @@ function resolveDatastoreObject(data) {
     return resolveDatastoreObjectId(data[0])
 }
 
-function resolveDatastoreList(res) {
-    const data = res[0]
-    return data.map(resolveDatastoreObjectId)
+function resolveDataId(res) {
+    res[0] = res[0].map(obj => {
+        obj.id = obj[datastore.KEY].id
+        return obj
+    })
+    return res
 }
 
 export function create(kind, data) {
@@ -41,13 +44,12 @@ export function retrieve(kind, id) {
     return datastore.get(key).then(resolveDatastoreObject).catch(e => e)
 }
 
-export function list(kind) {
-    const query = datastore.createQuery(kind)
-    return datastore.runQuery(query).then(resolveDatastoreList).catch(err => err)
-}
-
-export function queryFilter(kind, filters) {
+export function query(kind, options) {
+    const { pageSize, cursor, filters, orderBy } = options
     let query = datastore.createQuery(kind)
-    for (let filter of filters) query = query.filter(filter.field, filter.op, filter.value)
-    return datastore.runQuery(query).then(resolveDatastoreList).catch(err => err)
+    if (filters) for (let filter of filters) query = query.filter(filter.field, filter.op, filter.value)
+    if (orderBy) query = query.order(orderBy)
+    if (pageSize) query = query.limit(pageSize)
+    if (cursor) query = query.start(cursor)
+    return datastore.runQuery(query).then(resolveDataId)
 }
