@@ -1,8 +1,8 @@
 import { errors, throwError } from 'utils/error'
-import { list, query } from 'utils/datastore'
 
 import { PLACE_KIND } from 'modules/place/constants'
 import events from 'modules/place/events'
+import { query } from 'utils/datastore'
 import { resolveUserListObject } from 'utils/user'
 import to from 'await-to-js'
 
