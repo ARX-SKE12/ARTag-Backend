@@ -25,7 +25,7 @@ export default async function listPlace(socket) {
         if (token) {
             const [ userErr, placeListWithUser ] = await to(resolveUserListObject(token, placeList))
             if (userErr) throwError(socket, events.PLACE_LIST_ERROR, errors.UNAUTHORIZED)
-            else socket.emit(events.PLACE_LIST, placeListWithUser)
+            else socket.emit(events.PLACE_LIST, { places: placeListWithUser })
         } else throwError(socket, events.PLACE_LIST_ERROR, errors.TOKEN_LOST)
     }
 }

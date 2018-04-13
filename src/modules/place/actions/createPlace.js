@@ -12,7 +12,7 @@ import { upload } from 'utils/storage'
 
 async function initializePlaceObject(placeObject) {
     const { name, description, isPublic, thumbnail, user } = placeObject
-    const timestamp = Date.now()
+    const timestamp = Date.now().toString()
     const significant = `${timestamp}-${name}`
     const imageName = `${significant}.png`
     

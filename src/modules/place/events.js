@@ -12,5 +12,6 @@ export default {
     PLACE_UPDATE_ERROR: 'place-update-error',
     PLACE_RETRIEVE_SIGNIFICANT: 'place-retrieve-significant',
     PLACE_RESPONSE_SIGNIFICANT: 'place-response-significant',
-    PLACE_ERROR_SIGNIFICANT: 'place-error-significant'
+    PLACE_ERROR_SIGNIFICANT: 'place-error-significant',
+    PLACE_CLEAR_PAGGING: 'place-clear-pagging'
 }
