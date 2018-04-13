@@ -1,3 +1,4 @@
+import clearPagging from 'modules/place/actions/clearPagging'
 import createPlace from 'modules/place/actions/createPlace'
 import events from 'modules/place/events'
 import listPlace from 'modules/place/actions/listPlace'
@@ -20,5 +21,9 @@ export default [
     {
         event: events.PLACE_RETRIEVE_SIGNIFICANT,
         action: retrievePlacebySignificant
+    },
+    {
+        event: events.PLACE_CLEAR_PAGGING,
+        action: clearPagging
     }
 ]
