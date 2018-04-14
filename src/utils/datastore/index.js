@@ -25,8 +25,17 @@ function resolveDataId(res) {
 export function create(kind, data) {
     const key = datastore.key([ kind ])
     const entity = { key, data }
-    data.id = key.id
-    return datastore.save(entity).then(() => data).catch(err => err)
+    return datastore.save(entity).then(() => query(kind, {
+        filters: [{
+            field: 'timestamp',
+            op: '=',
+            value: data.timestamp
+        }, {
+            field: 'name',
+            op: '=',
+            value: data.name
+        }]
+    })).catch(err => err).then(places => places[0][0])
 }
 
 export async function update(kind, id, data) {
