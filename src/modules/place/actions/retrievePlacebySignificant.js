@@ -13,7 +13,7 @@ const NAME_FIELD = 'name'
 export default async function  retrievePlacebySignificant(socket, data) {
     const { encodedSignificant } = data
     const decodedData = Base64.decode(encodedSignificant).split('-')
-    const timestamp = Number(decodedData[0])
+    const timestamp = decodedData[0]
     const name = decodedData[1]
     const { token, user } = socket.handshake.session
     const filters = [{
@@ -29,13 +29,13 @@ export default async function  retrievePlacebySignificant(socket, data) {
     if (queryErr) throwError(socket, events.PLACE_ERROR_SIGNIFICANT, errors.INTERNAL_ERROR)
     else {
         if (token) {
-            const [ resolveErr, placeUser ] = resolveUserObject(token, place[0])
-            if (!place[0].is_public && (place[0].user !== user || place[0].users.indexOf(user) <0)) throwError(socket, events.PLACE_ERROR_SIGNIFICANT, errors.UNAUTHORIZED)
+            if (place[0].length === 0) throwError(socket, events.PLACE_ERROR_SIGNIFICANT, errors.TARGET_NOT_FOUND)
             else {
-                if (resolveErr) throwError(socket, events.PLACE_ERROR_SIGNIFICANT, errors.INTERNAL_ERROR)
-                else {
-                    socket.emit(events.PLACE_RESPONSE_SIGNIFICANT, placeUser)
-                }
+                if (place[0][0].is_public || (!place[0][0].is_public && (place[0][0].user === user || place[0][0].users.indexOf(user)))) {
+                    const [ resolveErr, placeUser ] = await to(resolveUserObject(token, place[0][0]))
+                    if (resolveErr) throwError(socket, events.PLACE_ERROR_SIGNIFICANT, errors.UNAUTHORIZED)
+                    else socket.emit(events.PLACE_RESPONSE_SIGNIFICANT, placeUser)
+                } else throwError(socket, events.PLACE_ERROR_SIGNIFICANT, errors.UNAUTHORIZED)
             }
         } else throwError(socket, events.PLACE_ERROR_SIGNIFICANT, errors.TOKEN_LOST)
     }
