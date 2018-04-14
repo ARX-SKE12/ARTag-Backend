@@ -1,12 +1,12 @@
 import { BUCKET_ROOT, PLACE_KIND, QR_BUCKET, THUMBNAIL_BUCKET } from 'modules/place/constants'
 import { errors, throwError } from 'utils/error'
+import { resolveSelfObject, resolveUserObject } from 'utils/user'
 
 import { Base64 } from 'js-base64'
 import QR from 'qrcode'
 import { compressImage } from 'utils/image'
 import { create } from 'utils/datastore'
 import events from 'modules/place/events'
-import { resolveSelfObject } from 'utils/user'
 import to from 'await-to-js'
 import { upload } from 'utils/storage'
 
@@ -47,8 +47,12 @@ export default async function createPlace(socket, placeData, io) {
                 const [ createErr, place ] = await to(create(PLACE_KIND, placeObject))
                 if (createErr) throwError(socket, events.PLACE_CREATE_ERROR, errors.INTERNAL_ERROR)
                 else {
-                    socket.emit(events.PLACE_CREATE_SUCCESS, { place })
-                    io.sockets.emit(events.PLACE_DATA_UPDATE)
+                    const [ resolveUserErr, placeWithUserObj ] = await to(resolveUserObject(token, place))
+                    if (resolveErr) throwError(socket, events.PLACE_CREATE_ERROR, errors.UNAUTHORIZED)
+                    else {
+                        socket.emit(events.PLACE_CREATE_SUCCESS, { place: placeWithUserObj })
+                        io.sockets.emit(events.PLACE_DATA_UPDATE)
+                    }
                 }
             }
         }
