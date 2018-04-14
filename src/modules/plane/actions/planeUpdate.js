@@ -7,14 +7,16 @@ import to from 'await-to-js'
 
 export default async function planeUpdate(socket, planeData, io) {
     const { user } = socket.handshake.session
-    const { id, data } = planeData
+    const { id, data, origin, origin_rotation } = planeData
     const [ retrieveErr, place ] = await to(retrieve(PLACE_KIND, id))
     if (retrieveErr) throwError(socket, events.PLANE_ERROR, errors.INTERNAL_ERROR)
     else {
         if (place.user !== user) throwError(socket, events.PLANE_ERROR, errors.PERMISSION_DENIED)
         else {
             const updateData = {
-                planes: data
+                planes: data,
+                origin,
+                origin_rotation
             }
             const [ updateErr ] = await to(update(PLACE_KIND, id, updateData))
             if (updateErr) throwError(socket, events.PLANE_ERROR, errors.INTERNAL_ERROR)

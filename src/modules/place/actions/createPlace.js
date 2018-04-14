@@ -30,6 +30,17 @@ async function initializePlaceObject(placeObject) {
         name, description, isPublic, user, timestamp,
         isActive: true,
         planes: [],
+        origin: {
+            x: 0,
+            y: 0,
+            z: 0
+        },
+        origin_rotation: {
+            x: 0,
+            y: 0,
+            z: 0,
+            w: 0
+        },
         users: []
     }
     return data
