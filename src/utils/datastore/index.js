@@ -45,7 +45,7 @@ export async function update(kind, id, data) {
     for (const props in data)
         updateData[props] = data[props]
     const entity = { key, data: updateData }
-    return datastore.save(entity)
+    return datastore.save(entity).then(()=>retrieve(kind, id))
 }
 
 export function retrieve(kind, id) {
