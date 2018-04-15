@@ -2,7 +2,7 @@ import { errors, throwError } from 'utils/error'
 
 import { TAG_KIND } from 'modules/tag/constants'
 import events from 'modules/tag/events'
-import { queryFilter } from 'utils/datastore'
+import { query } from 'utils/datastore'
 import { resolveUserListObject } from 'utils/user'
 import to from 'await-to-js'
 
@@ -16,14 +16,14 @@ export default async function listTag(socket) {
             op: '=',
             value: currentRoom
         }]
-        const [ listErr, tagList ] = await to(queryFilter(TAG_KIND, { filters }))
+        const [ listErr, tagList ] = await to(query(TAG_KIND, { filters }))
         if (listErr) throwError(socket, events.TAG_ERROR, errors.INTERNAL_ERROR)
         else {
             if (token) {
                 const [ resolveErr, resolveTagList ] = await to(resolveUserListObject(token, tagList))
                 if (resolveErr) throwError(socket, events.TAG_ERROR, errors.UNAUTHORIZED)
                 else {
-                    socket.emit(events.TAG_LIST, resolveTagList)
+                    socket.emit(events.TAG_LIST, { tags: resolveTagList })
                 }
             } else throwError(socket, events.TAG_ERROR, errors.TOKEN_LOST)
         }
