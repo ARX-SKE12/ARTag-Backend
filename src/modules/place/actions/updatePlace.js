@@ -36,7 +36,6 @@ export default async function updatePlace(socket, data, io) {
                     const [ resolveErr, placeWithUser ] = await to(resolveUserObject(token, updatedPlace))
                     if (resolveErr) throwError(socket, events.PLACE_UPDATE_ERROR, errors.UNAUTHORIZED)
                     else {
-                        console.log(placeWithUser)
                         socket.emit(events.PLACE_UPDATE_SUCCESS, { place: placeWithUser })
                         io.sockets.emit(events.PLACE_DATA_UPDATE)
                     }
