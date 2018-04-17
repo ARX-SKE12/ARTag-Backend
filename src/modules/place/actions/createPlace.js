@@ -1,11 +1,11 @@
 import { BUCKET_ROOT, PLACE_KIND, QR_BUCKET, THUMBNAIL_BUCKET } from 'modules/place/constants'
+import { create, query } from 'utils/datastore'
 import { errors, throwError } from 'utils/error'
 import { resolveSelfObject, resolveUserObject } from 'utils/user'
 
 import { Base64 } from 'js-base64'
 import QR from 'qrcode'
 import { compressImage } from 'utils/image'
-import { create } from 'utils/datastore'
 import events from 'modules/place/events'
 import to from 'await-to-js'
 import { upload } from 'utils/storage'
@@ -55,7 +55,7 @@ export default async function createPlace(socket, placeData, io) {
             const placeObject = await initializePlaceObject(placeWithUser)
             if (!placeObject) throwError(socket, events.PLACE_CREATE_ERROR, errors.INTERNAL_ERROR)
             else {
-                const [ createErr, place ] = await to(create(PLACE_KIND, placeObject).then(() => query(kind, {
+                const [ createErr, place ] = await to(create(PLACE_KIND, placeObject).then(() => query(PLACE_KIND, {
                     filters: [{
                         field: 'timestamp',
                         op: '=',
