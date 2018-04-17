@@ -1,10 +1,10 @@
 import { BUCKET_ROOT, CONTENT_BUCKET, PLACE_KIND, TAG_KIND } from 'modules/tag/constants';
-import { create, retrieve } from 'utils/datastore'
+import { create, query, retrieve } from 'utils/datastore'
 import { errors, throwError } from 'utils/error'
+import { resolveSelfObject, resolveUserObject } from 'utils/user'
 
 import { compressImage } from 'utils/image'
 import events from 'modules/tag/events'
-import { resolveSelfObject } from 'utils/user'
 import to from 'await-to-js'
 import { upload } from 'utils/storage'
 
@@ -18,10 +18,11 @@ async function initializeTagObject(tagData) {
         if (uploadErr) return null
         detail.image = cpdImage
     }
+    tagData.timestamp = Date.now().toString()
     return tagData
 }
 
-export default async function(socket, tagData, io) {
+export default async function createTag(socket, tagData, io) {
     const { token, user, currentRoom } = socket.handshake.session
     if (currentRoom) {
         const [ placeErr, place ] = await to(retrieve(PLACE_KIND, currentRoom))
@@ -34,14 +35,31 @@ export default async function(socket, tagData, io) {
                     const [ userErr, tagDataWithUser ] = await to(resolveSelfObject(token, tagData))
                     if (userErr) throwError(socket, events.TAG_ERROR, errors.UNAUTHORIZED)
                     else {
-                        const tag = initializeTagObject(tagDataWithUser)
+                        const tag = await initializeTagObject(tagDataWithUser)
                         if (!tag) throwError(socket, events.TAG_ERROR, errors.INTERNAL_ERROR)
                         else {
-                            const [ createErr ] =  await to(create(TAG_KIND, tag))
+                            const [ createErr, tagResult ] =  await to(create(TAG_KIND, tag).then(() => query(TAG_KIND, {
+                                filters: [{
+                                    field: 'timestamp',
+                                    op: '=',
+                                    value: tag.timestamp
+                                }]
+                            })).catch(err => err).then(tags => {
+                                console.log(tags)
+                                return tags[0][0]
+                            }))
+                            console.log(createErr)
                             if (createErr) throwError(socket, events.TAG_ERROR, errors.INTERNAL_ERROR)
                             else {
-                                socket.emit(events.TAG_CREATE_SUCCESS)
-                                io.to(currentRoom).emit(events.TAG_DATA_UPDATE)
+                                console.log(tagResult)
+                                const [ resolveErr, tagUser ] = await to(resolveUserObject(token, tagResult))
+                                console.log(resolveErr)
+                                if (resolveErr) throwError(socket, events.TAG_ERROR, errors.UNAUTHORIZED)
+                                else {
+                                    console.log(tagUser)
+                                    socket.emit(events.TAG_CREATE_SUCCESS, { tag: tagUser })
+                                    io.to(currentRoom).emit(events.TAG_DATA_UPDATE, { tag: tagUser })
+                                }
                             }
                         }
                     }

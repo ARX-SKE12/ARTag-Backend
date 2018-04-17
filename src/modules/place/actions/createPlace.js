@@ -55,7 +55,17 @@ export default async function createPlace(socket, placeData, io) {
             const placeObject = await initializePlaceObject(placeWithUser)
             if (!placeObject) throwError(socket, events.PLACE_CREATE_ERROR, errors.INTERNAL_ERROR)
             else {
-                const [ createErr, place ] = await to(create(PLACE_KIND, placeObject))
+                const [ createErr, place ] = await to(create(PLACE_KIND, placeObject).then(() => query(kind, {
+                    filters: [{
+                        field: 'timestamp',
+                        op: '=',
+                        value: placeObject.timestamp
+                    }, {
+                        field: 'name',
+                        op: '=',
+                        value: placeObject.name
+                    }]
+                })).catch(err => err).then(places => places[0][0]))
                 if (createErr) throwError(socket, events.PLACE_CREATE_ERROR, errors.INTERNAL_ERROR)
                 else {
                     const [ resolveUserErr, placeWithUserObj ] = await to(resolveUserObject(token, place))
