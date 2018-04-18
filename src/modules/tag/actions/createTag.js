@@ -11,14 +11,15 @@ import { upload } from 'utils/storage'
 async function initializeTagObject(tagData) {
     const { detail } = tagData
     const { image } = detail
+    const timestamp = Date.now().toString()
     if (image) {
         const [ compressErr, cpdImage ] = await to(compressImage(image, 800))
         if (compressErr) return null
-        const [ uploadErr ] = await to(upload(CONTENT_BUCKET, `${Date.now().toString()}.png`, cpdImage))
+        const [ uploadErr ] = await to(upload(CONTENT_BUCKET, `${timestamp}.png`, cpdImage))
         if (uploadErr) return null
-        detail.image = cpdImage
     }
-    tagData.timestamp = Date.now().toString()
+    delete tagData.detail.image
+    tagData.timestamp = timestamp
     return tagData
 }
 
