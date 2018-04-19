@@ -11,14 +11,15 @@ import { upload } from 'utils/storage'
 async function initializeTagObject(tagData) {
     const { detail } = tagData
     const { image } = detail
+    const timestamp = Date.now().toString()
     if (image) {
         const [ compressErr, cpdImage ] = await to(compressImage(image, 800))
         if (compressErr) return null
-        const [ uploadErr ] = await to(upload(CONTENT_BUCKET, `${Date.now().toString()}.png`, cpdImage))
+        const [ uploadErr ] = await to(upload(CONTENT_BUCKET, `${timestamp}.png`, cpdImage))
         if (uploadErr) return null
-        detail.image = cpdImage
     }
-    tagData.timestamp = Date.now().toString()
+    delete tagData.detail.image
+    tagData.timestamp = timestamp
     return tagData
 }
 
@@ -45,18 +46,13 @@ export default async function createTag(socket, tagData, io) {
                                     value: tag.timestamp
                                 }]
                             })).catch(err => err).then(tags => {
-                                console.log(tags)
                                 return tags[0][0]
                             }))
-                            console.log(createErr)
                             if (createErr) throwError(socket, events.TAG_ERROR, errors.INTERNAL_ERROR)
                             else {
-                                console.log(tagResult)
                                 const [ resolveErr, tagUser ] = await to(resolveUserObject(token, tagResult))
-                                console.log(resolveErr)
                                 if (resolveErr) throwError(socket, events.TAG_ERROR, errors.UNAUTHORIZED)
                                 else {
-                                    console.log(tagUser)
                                     socket.emit(events.TAG_CREATE_SUCCESS, { tag: tagUser })
                                     io.to(currentRoom).emit(events.TAG_DATA_UPDATE, { tag: tagUser })
                                 }
