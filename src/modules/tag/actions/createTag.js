@@ -46,18 +46,13 @@ export default async function createTag(socket, tagData, io) {
                                     value: tag.timestamp
                                 }]
                             })).catch(err => err).then(tags => {
-                                console.log(tags)
                                 return tags[0][0]
                             }))
-                            console.log(createErr)
                             if (createErr) throwError(socket, events.TAG_ERROR, errors.INTERNAL_ERROR)
                             else {
-                                console.log(tagResult)
                                 const [ resolveErr, tagUser ] = await to(resolveUserObject(token, tagResult))
-                                console.log(resolveErr)
                                 if (resolveErr) throwError(socket, events.TAG_ERROR, errors.UNAUTHORIZED)
                                 else {
-                                    console.log(tagUser)
                                     socket.emit(events.TAG_CREATE_SUCCESS, { tag: tagUser })
                                     io.to(currentRoom).emit(events.TAG_DATA_UPDATE, { tag: tagUser })
                                 }
