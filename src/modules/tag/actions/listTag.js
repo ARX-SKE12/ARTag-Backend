@@ -20,7 +20,7 @@ export default async function listTag(socket) {
         if (listErr) throwError(socket, events.TAG_ERROR, errors.INTERNAL_ERROR)
         else {
             if (token) {
-                const [ resolveErr, resolveTagList ] = await to(resolveUserListObject(token, tagList))
+                const [ resolveErr, resolveTagList ] = await to(resolveUserListObject(token, tagList[0]))
                 if (resolveErr) throwError(socket, events.TAG_ERROR, errors.UNAUTHORIZED)
                 else {
                     socket.emit(events.TAG_LIST, { tags: resolveTagList })
