@@ -3,6 +3,7 @@ import { retrieve, update } from 'utils/datastore'
 
 import { PLACE_KIND } from 'modules/plane/constants'
 import events from 'modules/plane/events'
+import { resolveUserObject } from 'utils/user'
 import to from 'await-to-js'
 
 export default async function planeUpdate(socket, planeData, io) {
@@ -18,10 +19,12 @@ export default async function planeUpdate(socket, planeData, io) {
                 origin,
                 origin_rotation
             }
-            const [ updateErr ] = await to(update(PLACE_KIND, id, updateData))
+            const [ updateErr, updatedPlace ] = await to(update(PLACE_KIND, id, updateData))
             if (updateErr) throwError(socket, events.PLANE_ERROR, errors.INTERNAL_ERROR)
             else {
-                io.to(id).emit(events.PLANE_UPGRADE)
+                const [ resolveErr, placeWithUser ] = await to(resolveUserObject(token, updatedPlace))
+                if (resolveErr) throwError(socket, events.PLACE_UPDATE_ERROR, errors.UNAUTHORIZED)
+                else io.to(id).emit(events.PLANE_UPGRADE, { place: placeWithUser })
             }
         }
     }
