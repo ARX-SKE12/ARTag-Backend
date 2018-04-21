@@ -37,7 +37,7 @@ export default async function updatePlace(socket, data, io) {
                     if (resolveErr) throwError(socket, events.PLACE_UPDATE_ERROR, errors.UNAUTHORIZED)
                     else {
                         socket.emit(events.PLACE_UPDATE_SUCCESS, { place: placeWithUser })
-                        io.sockets.emit(events.PLACE_DATA_UPDATE)
+                        io.sockets.emit(events.PLACE_DATA_UPDATE, { place: placeWithUser })
                     }
                 }
             }
