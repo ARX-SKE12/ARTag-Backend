@@ -72,7 +72,7 @@ export default async function createPlace(socket, placeData, io) {
                     if (resolveErr) throwError(socket, events.PLACE_CREATE_ERROR, errors.UNAUTHORIZED)
                     else {
                         socket.emit(events.PLACE_CREATE_SUCCESS, { place: placeWithUserObj })
-                        io.sockets.emit(events.PLACE_DATA_UPDATE)
+                        io.sockets.emit(events.PLACE_DATA_UPDATE, { place: placeWithUserObj })
                     }
                 }
             }
