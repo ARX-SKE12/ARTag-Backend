@@ -7,7 +7,7 @@ import { resolveUserObject } from 'utils/user'
 import to from 'await-to-js'
 
 export default async function planeUpdate(socket, planeData, io) {
-    const { user } = socket.handshake.session
+    const { user, token } = socket.handshake.session
     const { id, data, origin, origin_rotation } = planeData
     const [ retrieveErr, place ] = await to(retrieve(PLACE_KIND, id))
     if (retrieveErr) throwError(socket, events.PLANE_ERROR, errors.INTERNAL_ERROR)
