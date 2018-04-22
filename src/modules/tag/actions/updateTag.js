@@ -3,6 +3,7 @@ import { retrieve, update } from 'utils/datastore'
 
 import { TAG_KIND } from 'modules/tag/constants'
 import events from 'modules/tag/events'
+import { resolveUserObject } from 'utils/user'
 import to from 'await-to-js'
 
 export default async function updateTag(socket, tagData, io) {
@@ -15,11 +16,16 @@ export default async function updateTag(socket, tagData, io) {
             else {
                 if (tag.user !== user) throwError(socket, events.TAG_ERROR, errors.PERMISSION_DENIED)
                 else {
-                    const [ updateErr ] = await to(update(TAG_KIND, id, updatedData))
+                    const [ updateErr, tagUpdatedData ] = await to(update(TAG_KIND, id, updatedData))
                     if (updateErr) throwError(socket, events.TAG_ERROR, errors.INTERNAL_ERROR)
                     else {
-                        socket.emit(events.TAG_UPDATE_SUCCESS)
-                        io.to(currentRoom).emit(events.TAG_DATA_UPDATE)
+                        const [ resolveErr, tagUser ] = await to(resolveUserObject(token, tagUpdatedData))
+                        if (resolveErr) throwError(socket, events.TAG_ERROR, errors.UNAUTHORIZED)
+                        else {
+                            socket.emit(events.TAG_UPDATE_SUCCESS, { tag: tagUser })
+                            io.to(currentRoom).emit(events.TAG_DATA_UPDATE, { tag: tagUser })
+                        
+                        }
                     }
                 } 
             }
