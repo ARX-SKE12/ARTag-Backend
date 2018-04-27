@@ -1,8 +1,6 @@
 
 export default {
-    COLLABORATE_LIST_REQUEST: 'collaborate-request',
-    COLLABORATE_LIST: 'collaborate-list',
-    COLLABORATE_ADD: 'collaborate-add',
-    COLLABORATE_DELETE: 'collaborate-delete',
+    COLLABORATE_UPDATE: 'collaborate-update',
+    COLLABORATE_UPDATE_SUCCESS: 'collaborate-update-success',
     COLLABORATE_ERROR: 'collaborate-error'
 }
