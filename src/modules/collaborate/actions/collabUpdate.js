@@ -4,8 +4,9 @@ import { PLACE_KIND } from 'modules/collaborate/constatns'
 import events from 'modules/collaborate/events'
 import to from 'await-to-js'
 
-export default async function collabAdd(socket, data) {
+export default async function collabUpdate(socket, data) {
     const { user, token } = socket.handshake.session
+    const { users } = data
     const [ retrieveErr, place ] = await to(retrieve(PLACE_KIND, id))
     if (retrieveErr) throwError(socket, events.COLLABORATE_ERROR, errors.INTERNAL_ERROR)
     else {
