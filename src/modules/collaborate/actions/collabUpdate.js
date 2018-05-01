@@ -20,7 +20,10 @@ export default async function collabUpdate(socket, data) {
             else {
                 const [ resolveErr, placeWithUser ] = await to(resolveUserObject(token, updatedPlace))
                 if (resolveErr) throwError(socket, events.COLLABORATE_ERROR, errors.UNAUTHORIZED)
-                else socket.emit(events.COLLABORATE_ADD_SUCCESS, { place: placeWithUser })
+                else {
+                    socket.emit(events.COLLABORATE_ADD_SUCCESS, { place: placeWithUser })
+                    console.log(`${placeWithUser.name}'s collaborator has updated!`)
+                }
             }
         }
     }

@@ -8,6 +8,7 @@ function emitSuccess(socket, userData, token) {
     socket.handshake.session.token = token
     socket.handshake.session.user = userData.id
     socket.emit(events.AUTH_SUCCESS, userData)
+    console.log(`${userData.name} Authentication Successful`)
 }
 
 function emitError(socket, error) {

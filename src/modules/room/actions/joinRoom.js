@@ -20,6 +20,7 @@ export default async function(socket, placeData, io) {
                 userList: Array.from(new Set(room))
             }
             io.to(placeId).emit(events.ROOM_USER_ARRIVE, updateData)
+            console.log(`${user} joined ${placeId}`)
         }
     }
 }
