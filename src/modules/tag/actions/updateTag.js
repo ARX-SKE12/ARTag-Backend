@@ -24,6 +24,7 @@ export default async function updateTag(socket, tagData, io) {
                         else {
                             socket.emit(events.TAG_UPDATE_SUCCESS, { tag: tagUser })
                             io.to(currentRoom).emit(events.TAG_DATA_UPDATE, { tag: tagUser })
+                            console.log(`${tagUser.user.name} created Tag called ${tagUser.id}`)
                         }
                     }
                 } 

@@ -23,6 +23,7 @@ export default async function leaveRoom(socket, data, io) {
                         userList: Array.from(new Set(room))
                     }
                     io.to(currentRoom).emit(events.ROOM_USER_LEFT, updateData)
+                    console.log(`${user} leave ${currentRoom}`)
                 }
             }
         }

@@ -24,7 +24,10 @@ export default async function planeUpdate(socket, planeData, io) {
             else {
                 const [ resolveErr, placeWithUser ] = await to(resolveUserObject(token, updatedPlace))
                 if (resolveErr) throwError(socket, events.PLACE_UPDATE_ERROR, errors.UNAUTHORIZED)
-                else io.to(id).emit(events.PLANE_UPGRADE, { place: placeWithUser })
+                else {
+                    io.to(id).emit(events.PLANE_UPGRADE, { place: placeWithUser })
+                    console.log(`${placeWithUser.user.name} updated plane of ${placeWithUser.name}`)
+                }
             }
         }
     }

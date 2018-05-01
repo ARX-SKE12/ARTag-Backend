@@ -38,6 +38,7 @@ export default async function updatePlace(socket, data, io) {
                     else {
                         socket.emit(events.PLACE_UPDATE_SUCCESS, { place: placeWithUser })
                         io.sockets.emit(events.PLACE_DATA_UPDATE, { place: placeWithUser })
+                        console.log(`${placeWithUser.user.name} updated Place ${placeWithUser.name}`)
                     }
                 }
             }
