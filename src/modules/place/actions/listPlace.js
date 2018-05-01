@@ -23,7 +23,7 @@ export default async function listPlace(socket) {
         const queryInfo = placeResult[1]
         socket.handshake.session.cursor = queryInfo.endCursor
         if (token) {
-            const [ userErr, placeListWithUser ] = await to(resolveUserListObject(token, placeList))
+            const [ userErr, placeListWithUser ] = await to(resolveUserListObject(token, placeList.filter(place => place.isActive)))
             if (userErr) throwError(socket, events.PLACE_LIST_ERROR, errors.UNAUTHORIZED)
             else socket.emit(events.PLACE_LIST, { places: placeListWithUser })
         } else throwError(socket, events.PLACE_LIST_ERROR, errors.TOKEN_LOST)
