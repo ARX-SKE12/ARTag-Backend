@@ -71,6 +71,7 @@ export default async function createPlace(socket, placeData, io) {
                     const [ resolveUserErr, placeWithUserObj ] = await to(resolveUserObject(token, place))
                     if (resolveErr) throwError(socket, events.PLACE_CREATE_ERROR, errors.UNAUTHORIZED)
                     else {
+                        console.log(`${placeWithUserObj.user.name} is create Place ${placeWithUserObj.name}`)
                         socket.emit(events.PLACE_CREATE_SUCCESS, { place: placeWithUserObj })
                         io.sockets.emit(events.PLACE_DATA_UPDATE, { place: placeWithUserObj })
                     }
