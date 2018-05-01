@@ -20,6 +20,7 @@ async function initializeTagObject(tagData) {
     }
     delete tagData.detail.image
     tagData.timestamp = timestamp
+    tagData.isActive = true
     return tagData
 }
 
