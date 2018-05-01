@@ -10,12 +10,14 @@ import { upload } from 'utils/storage'
 
 async function updateThumbnail(updatedData) {
     const { thumbnail, timestamp, name } = updatedData
-    const significant = `${timestamp}-${name}`
-    const imageName = `${significant}.png`
-    const [ compressThumbnailErr, thumbnailImage ] = await to(compressImage(thumbnail, 800))
-    if (compressThumbnailErr) return false
-    const [ uploadThumbnailErr ] = await to(upload(THUMBNAIL_BUCKET, imageName, thumbnailImage))
-    if (uploadThumbnailErr) return false
+    if (thumbnail) {
+        const significant = `${timestamp}-${name}`
+        const imageName = `${significant}.png`
+        const [ compressThumbnailErr, thumbnailImage ] = await to(compressImage(thumbnail, 800))
+        if (compressThumbnailErr) return false
+        const [ uploadThumbnailErr ] = await to(upload(THUMBNAIL_BUCKET, imageName, thumbnailImage))
+        if (uploadThumbnailErr) return false
+    }
     return true
 }
 
